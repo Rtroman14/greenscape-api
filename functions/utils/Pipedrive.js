@@ -34,7 +34,7 @@ module.exports = class PipeDriveApi {
 
             return res.data.data;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR GETTING DEAL ID ---", error);
         }
     }
 
@@ -45,7 +45,7 @@ module.exports = class PipeDriveApi {
 
             return res.data.data;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR GETTING DEALS ---", error);
         }
     }
 
@@ -56,38 +56,31 @@ module.exports = class PipeDriveApi {
 
             return res.data.data;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR GETTING DEAL FIELDS ---", error);
         }
     }
 
-    async createNewDeal() {
+    async createDeal(data) {
         try {
-            var qs = require("qs");
-            var data = qs.stringify({
-                title: "Deal Title",
-                person_id: "<integer>",
-                org_id: "<integer>",
-                stage_id: "<integer>",
-                status: "<string>",
-            });
-            const res = await axios.post(
-                `https://${this.company}.pipedrive.com/api/v1/deals?api_token=${this.token}`
-            );
+            const config = this.getConfig("post", "deals?", data);
+            const res = await axios(config);
 
-            return res.data;
+            return res.data.data;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR CREATING DEAL ---", error);
         }
     }
 
-    async personByTerm(name) {
+    async findPerson(name) {
         try {
             const config = this.getConfig("get", `persons/search?term=${name}&`);
             const res = await axios(config);
 
-            return res.data.data.items[0].item;
+            const person = res.data.data.items;
+
+            return person.length > 0 ? person[0].item : false;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR FINDING PERSON ---", error);
         }
     }
 
@@ -98,7 +91,34 @@ module.exports = class PipeDriveApi {
 
             return res.data.data;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ---", error);
+            console.log("ERROR CREATING PERSON ---", error);
+        }
+    }
+
+    async getAllUsers() {
+        try {
+            const config = this.getConfig("get", "users?");
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR GETTING USERS ---", error);
+        }
+    }
+
+    async createOrganization(data) {
+        var data = JSON.stringify({
+            name: "New Organization",
+            address: "220 Summit Blvd, Broomfield CO",
+        });
+
+        try {
+            const config = this.getConfig("post", "organizations?", data);
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR CREATING ORGANIZATION ---", error);
         }
     }
 };
