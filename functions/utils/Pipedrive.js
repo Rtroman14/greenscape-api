@@ -95,6 +95,19 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async updatePerson(personID, org_id) {
+        try {
+            const config = this.getConfig("put", `persons/${personID}?`, {
+                org_id,
+            });
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR CREATING PERSON ---", error);
+        }
+    }
+
     async getAllUsers() {
         try {
             const config = this.getConfig("get", "users?");

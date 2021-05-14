@@ -1,4 +1,4 @@
-const createNewDeal = require("./utils/createNewDeal");
+const createContact = require("./utils/createContact");
 
 exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
@@ -7,7 +7,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        return await createNewDeal(event);
+        return await createContact(event);
     } else {
         return {
             statusCode: 500,
