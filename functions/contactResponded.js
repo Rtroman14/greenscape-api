@@ -15,16 +15,19 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const newContact = JSON.parse(event.body);
 
-        let person = await pipedrivePerson(newContact);
+        // let person = await pipedrivePerson(newContact);
 
-        if (person.organization === null || person.org_id === null) {
-            const organization = await pipedriveOrganization(newContact);
-            person = await Pipedrive.updatePerson(person.id, organization.id);
-        }
+        // if (person.organization === null || person.org_id === null) {
+        //     const organization = await pipedriveOrganization(newContact);
+        //     person = await Pipedrive.updatePerson(person.id, organization.id);
+        // }
+        console.log(newContact);
+        console.log(newContact.address1);
+        console.log(newContact.full_name);
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ person }),
+            body: JSON.stringify({ newContact }),
         };
     } else {
         return {
