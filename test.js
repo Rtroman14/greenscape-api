@@ -10,10 +10,10 @@ const pipedriveOrganization = require("./functions/utils/pipedriveOrganization")
 
 const newContact = {
     contact_id: "sRqF0l6lOCIzaucfhwDI",
-    first_name: "Chris",
-    last_name: "Pendergast",
-    full_name: "chris pendy",
-    email: "chris@sumammedia.co",
+    first_name: "Danae",
+    last_name: "McDorment",
+    full_name: "Danae McDorment",
+    email: "Danae@sumammedia.co",
     phone: "+19196066779",
     tags: "",
     address1: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
