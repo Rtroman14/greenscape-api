@@ -79,6 +79,7 @@ const newContact = {
         if (person.organization === null || person.org_id === null) {
             const organization = await pipedriveOrganization(newContact);
             person = await Pipedrive.updatePerson(person.id, organization.id);
+            console.log(organization);
         }
     } catch (error) {
         console.log(error.message);

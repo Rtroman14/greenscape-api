@@ -20,6 +20,8 @@ module.exports = async (contact) => {
             });
 
             person = await Pipedrive.createPerson(newPerson);
+
+            console.log(`Created new contact: ${contact.full_name}`);
         }
 
         return person;
