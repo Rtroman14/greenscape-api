@@ -1,7 +1,7 @@
 require("dotenv").config();
 
-const createOrganization = require("./utils/createOrganization");
 const pipedrivePerson = require("./utils/pipedrivePerson");
+const pipedriveOrganization = require("./utils/pipedriveOrganization");
 
 const PipedriveApi = require("./utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
