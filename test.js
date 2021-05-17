@@ -5,12 +5,15 @@ const { findUser } = require("./functions/utils/helpers");
 const PipedriveApi = require("./functions/utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
+const pipedrivePerson = require("./functions/utils/pipedrivePerson");
+const pipedriveOrganization = require("./functions/utils/pipedriveOrganization");
+
 const newContact = {
     contact_id: "sRqF0l6lOCIzaucfhwDI",
-    first_name: "Robert",
-    last_name: "Hoyt",
-    full_name: "Robert Hoyt",
-    email: "roberthoyt@yorkproperties.com",
+    first_name: "Chris",
+    last_name: "Pendergast",
+    full_name: "chris pendy",
+    email: "chris@sumammedia.co",
     phone: "+19196066779",
     tags: "",
     address1: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
@@ -58,11 +61,25 @@ const newContact = {
         // const newOrganization = await Pipedrive.createOrganization(organization);
         // console.log(newOrganization);
         // ------------ FIND PERSON ------------ //
-        // const existingPerson = await Pipedrive.findPerson("ryan roman");
-        // if (existingPerson.organization === null) {
-        //     console.log("CONTACT HAS ORGANIZATION");
+        // const existingPerson = await Pipedrive.findPersonName("chris pendergast");
+        // const person = await Pipedrive.findPersonID(existingPerson.id);
+        // console.log(person);
+        // if (person.org_id === null) {
+        //     console.log("CONTACT DOESN'T HAVE ORGANIZATION");
         // }
-        // ------------ CREATE NEW PERSON AND ORGANIZATION ------------ //
+        // console.log(existingPerson);
+        // ------------ UPDATE PERSON ------------ //
+        // await Pipedrive.updatePerson(existingPerson.id, newOrganization.id);
+        // ------------ FIND ORGANIZATION ------------ //
+        // const foundOrganization = await Pipedrive.findOrganization("220 Summit Blvd");
+        // console.log(foundOrganization);
+        // ------------ CREATE/FIND PERSON ------------ //
+        let person = await pipedrivePerson(newContact);
+
+        if (person.organization === null || person.org_id === null) {
+            const organization = await pipedriveOrganization(newContact);
+            person = await Pipedrive.updatePerson(person.id, organization.id);
+        }
     } catch (error) {
         console.log(error.message);
     }

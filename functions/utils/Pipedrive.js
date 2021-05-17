@@ -71,7 +71,7 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async findPerson(name) {
+    async findPersonName(name) {
         try {
             const config = this.getConfig("get", `persons/search?term=${name}&`);
             const res = await axios(config);
@@ -79,6 +79,19 @@ module.exports = class PipeDriveApi {
             const person = res.data.data.items;
 
             return person.length > 0 ? person[0].item : false;
+        } catch (error) {
+            console.log("ERROR FINDING PERSON ---", error);
+        }
+    }
+
+    async findPersonID(id) {
+        try {
+            const config = this.getConfig("get", `persons/${id}?`);
+            const res = await axios(config);
+
+            const person = res.data.data;
+
+            return person;
         } catch (error) {
             console.log("ERROR FINDING PERSON ---", error);
         }
@@ -119,12 +132,20 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async createOrganization(data) {
-        var data = JSON.stringify({
-            name: "New Organization",
-            address: "220 Summit Blvd, Broomfield CO",
-        });
+    async findOrganization(address) {
+        try {
+            const config = this.getConfig("get", `organizations/search?term=${address}&`);
+            const res = await axios(config);
 
+            const organization = res.data.data.items;
+
+            return organization.length > 0 ? organization[0].item : false;
+        } catch (error) {
+            console.log("ERROR FINDING ORGANIZATION ---", error);
+        }
+    }
+
+    async createOrganization(data) {
         try {
             const config = this.getConfig("post", "organizations?", data);
             const res = await axios(config);
