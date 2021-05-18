@@ -155,4 +155,15 @@ module.exports = class PipeDriveApi {
             console.log("ERROR CREATING ORGANIZATION ---", error);
         }
     }
+
+    async addNote(person_id, content) {
+        try {
+            const config = this.getConfig("post", "notes?", { content, person_id });
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR CREATING ORGANIZATION ---", error);
+        }
+    }
 };

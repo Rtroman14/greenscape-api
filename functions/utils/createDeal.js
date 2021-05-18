@@ -11,9 +11,7 @@ module.exports = async (event) => {
             name: "Nick Perent",
             email: "nick@summamedia.co",
             phone: "715 252-3333",
-            street: "220 Summit Blvd",
-            city: "Broomfield",
-            state: "CO",
+            address1: "220 Summit Blvd, Broomfield, CO 80021",
         };
         const foundUser = await findUser("Ryan Roman");
         const existingPerson = await Pipedrive.findPerson("Chris Pendy");

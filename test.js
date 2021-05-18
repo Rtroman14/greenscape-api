@@ -12,7 +12,7 @@ const newContact = {
     contact_id: "sRqF0l6lOCIzaucfhwDI",
     first_name: "Danae",
     last_name: "McDorment",
-    full_name: "Danae McDorment",
+    full_name: "Nick Peret",
     email: "Danae@sumammedia.co",
     phone: "+19196066779",
     tags: "",
@@ -53,13 +53,8 @@ const newContact = {
 (async () => {
     try {
         // ------------ CREATE NEW ORGANIZATION ------------ //
-        // const organization = JSON.stringify({
-        //     name: "UNSURE HOW TO NAME",
-        //     address: "210 Summit Blvd",
-        //     // "2ef18d57c268bff4b27bb9eb79d815a5464a2b53": "15",
-        // });
-        // const newOrganization = await Pipedrive.createOrganization(organization);
-        // console.log(newOrganization);
+        // const organization = await pipedriveOrganization(newContact);
+        // console.log(organization);
         // ------------ FIND PERSON ------------ //
         // const existingPerson = await Pipedrive.findPersonName("chris pendergast");
         // const person = await Pipedrive.findPersonID(existingPerson.id);
@@ -74,13 +69,42 @@ const newContact = {
         // const foundOrganization = await Pipedrive.findOrganization("220 Summit Blvd");
         // console.log(foundOrganization);
         // ------------ CREATE/FIND PERSON ------------ //
+        // let person = await pipedrivePerson(newContact);
+        // if (person.organization === null || person.org_id === null) {
+        //     const organization = await pipedriveOrganization(newContact);
+        //     person = await Pipedrive.updatePerson(person.id, organization.id);
+        //     console.log(organization);
+        // }
+
+        // console.log(person);
+        // ------------ CREATE NEW DEAL ------------ //
+
         let person = await pipedrivePerson(newContact);
+
+        let organizationID;
 
         if (person.organization === null || person.org_id === null) {
             const organization = await pipedriveOrganization(newContact);
             person = await Pipedrive.updatePerson(person.id, organization.id);
-            console.log(organization);
+
+            console.log(`Assigned ${organization.name} to ${newContact.full_name}`);
+
+            organizationID = organization.id;
+        } else {
+            organizationID = person.org_id || person.organization.id;
         }
+
+        const deal = JSON.stringify({
+            title: "New Deal Title",
+            person_id: person.id,
+            org_id: organizationID,
+            stage_id: 1,
+            status: "open",
+        });
+
+        const newDeal = await Pipedrive.createDeal(deal);
+
+        console.log(`Created new deal: ${newDeal.title}`);
     } catch (error) {
         console.log(error.message);
     }

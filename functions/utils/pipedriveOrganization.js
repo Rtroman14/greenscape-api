@@ -18,7 +18,7 @@ module.exports = async (contact) => {
 
             organization = await Pipedrive.createOrganization(newOrganization);
 
-            console.log(`Created new contact: ${organization.name}`);
+            console.log(`Created new organization: ${organization.name}`);
         }
 
         return organization;
