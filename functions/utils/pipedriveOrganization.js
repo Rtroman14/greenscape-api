@@ -27,3 +27,5 @@ module.exports = async (contact) => {
         return false;
     }
 };
+
+// NEED TO SET PROPERTY !!!!
