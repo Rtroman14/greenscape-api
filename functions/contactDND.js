@@ -16,11 +16,20 @@ exports.handler = async (event) => {
 
         let person = await pipedrivePerson(newContact);
 
-        const note = await Pipedrive.addNote(person.id, `${person.name} wishes not to contacted`);
+        const note = JSON.stringify({
+            content: `${person.name} wishes not to contacted`,
+            person_id: person.id,
+        });
+        const newNote = await Pipedrive.createNote(note);
+
+        // get DND field and update person with field
+        const dndField = await Pipedrive.getPersonFields("Label", "Do Not Contact");
+        const updatedFields = JSON.stringify({ label: dndField.id });
+        await Pipedrive.updatePerson(person.id, updatedFields);
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ note }),
+            body: JSON.stringify({ newNote }),
         };
     } else {
         return {

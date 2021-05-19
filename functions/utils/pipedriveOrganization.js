@@ -10,10 +10,15 @@ module.exports = async (contact) => {
         let organization = await Pipedrive.findOrganization(contact.address1);
 
         if (!organization) {
+            const category = await Pipedrive.getOrganizationFields("Category");
+
+            const property = category.options.find((option) => option.label === "Property");
+
             const newOrganization = JSON.stringify({
                 name: `${contact.full_name} - ${contact.address1}`,
                 address: contact.address1,
                 visible_to: "7", // verify in greenscape database
+                [category.key]: property.id,
             });
 
             organization = await Pipedrive.createOrganization(newOrganization);

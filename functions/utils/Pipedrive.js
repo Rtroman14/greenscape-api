@@ -108,11 +108,9 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async updatePerson(personID, org_id) {
+    async updatePerson(personID, data) {
         try {
-            const config = this.getConfig("put", `persons/${personID}?`, {
-                org_id,
-            });
+            const config = this.getConfig("put", `persons/${personID}?`, data);
             const res = await axios(config);
 
             return res.data.data;
@@ -156,9 +154,52 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async addNote(person_id, content) {
+    async getPersonFields(fieldName, label) {
         try {
-            const config = this.getConfig("post", "notes?", { content, person_id });
+            const config = this.getConfig("get", "personFields?");
+            const res = await axios(config);
+
+            const data = res.data.data;
+
+            const options = data.find((field) => field.name === fieldName).options;
+
+            console.log(options);
+
+            return options.find((option) => option.label === label);
+        } catch (error) {
+            console.log("ERROR CREATING ORGANIZATION ---", error);
+        }
+    }
+
+    async getOrganizationFields(fieldName) {
+        try {
+            const config = this.getConfig("get", "organizationFields?");
+            const res = await axios(config);
+
+            const data = res.data.data;
+
+            const options = data.find((field) => field.name === fieldName);
+
+            return options;
+        } catch (error) {
+            console.log("ERROR CREATING ORGANIZATION ---", error);
+        }
+    }
+
+    async createNote(data) {
+        try {
+            const config = this.getConfig("post", "notes?", data);
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR CREATING ORGANIZATION ---", error);
+        }
+    }
+
+    async createActivity(data) {
+        try {
+            const config = this.getConfig("post", "activities?", data);
             const res = await axios(config);
 
             return res.data.data;

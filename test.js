@@ -12,7 +12,7 @@ const newContact = {
     contact_id: "sRqF0l6lOCIzaucfhwDI",
     first_name: "Danae",
     last_name: "McDorment",
-    full_name: "Nick Peret",
+    full_name: "Ryan Roman",
     email: "Danae@sumammedia.co",
     phone: "+19196066779",
     tags: "",
@@ -75,36 +75,10 @@ const newContact = {
         //     person = await Pipedrive.updatePerson(person.id, organization.id);
         //     console.log(organization);
         // }
-
         // console.log(person);
-        // ------------ CREATE NEW DEAL ------------ //
-
-        let person = await pipedrivePerson(newContact);
-
-        let organizationID;
-
-        if (person.organization === null || person.org_id === null) {
-            const organization = await pipedriveOrganization(newContact);
-            person = await Pipedrive.updatePerson(person.id, organization.id);
-
-            console.log(`Assigned ${organization.name} to ${newContact.full_name}`);
-
-            organizationID = organization.id;
-        } else {
-            organizationID = person.org_id || person.organization.id;
-        }
-
-        const deal = JSON.stringify({
-            title: "New Deal Title",
-            person_id: person.id,
-            org_id: organizationID,
-            stage_id: 1,
-            status: "open",
-        });
-
-        const newDeal = await Pipedrive.createDeal(deal);
-
-        console.log(`Created new deal: ${newDeal.title}`);
+        // ------------ FIELDS ------------ //
+        // const option = await Pipedrive.getFields("organization", "Category", "Property");
+        // console.log(option);
     } catch (error) {
         console.log(error.message);
     }

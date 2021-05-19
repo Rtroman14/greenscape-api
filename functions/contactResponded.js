@@ -19,7 +19,9 @@ exports.handler = async (event) => {
 
         if (person.organization === null || person.org_id === null) {
             const organization = await pipedriveOrganization(newContact);
-            person = await Pipedrive.updatePerson(person.id, organization.id);
+
+            const updatedFields = JSON.stringify({ org_id: organization.id });
+            person = await Pipedrive.updatePerson(person.id, updatedFields);
 
             console.log(`Assigned ${organization.name} to ${newContact.full_name}`);
         }
