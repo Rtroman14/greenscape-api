@@ -15,7 +15,7 @@ module.exports = async (contact) => {
             const property = category.options.find((option) => option.label === "Property");
 
             const newOrganization = JSON.stringify({
-                name: `${contact.full_name} - ${contact.address1}`,
+                name: `${contact.name} - ${contact.address1}`,
                 address: contact.address1,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,

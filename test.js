@@ -4,9 +4,14 @@ const { findUser } = require("./functions/utils/helpers");
 
 const PipedriveApi = require("./functions/utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
+const AirtableApi = require("./src/airtable");
+const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
+const HighlevelApi = require("./src/Highlevel");
 
 const pipedrivePerson = require("./functions/utils/pipedrivePerson");
 const pipedriveOrganization = require("./functions/utils/pipedriveOrganization");
+
+const { campaignsDueToday, liveCampaigns, campaignsToRun } = require("./src/helpers");
 
 const newContact = {
     contact_id: "sRqF0l6lOCIzaucfhwDI",

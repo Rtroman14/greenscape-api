@@ -7,11 +7,11 @@ module.exports = async (contact) => {
     try {
         // const foundUser = await findUser("Ryan Roman");
 
-        let person = await Pipedrive.findPersonName(contact.full_name);
+        let person = await Pipedrive.findPersonName(contact.name);
 
         if (!person) {
             const newPerson = JSON.stringify({
-                name: contact.full_name,
+                name: contact.name,
                 // owner_id: foundUser.id,
                 // org_id: orgID,
                 visible_to: "7", // verify in greenscape database
@@ -21,7 +21,7 @@ module.exports = async (contact) => {
 
             person = await Pipedrive.createPerson(newPerson);
 
-            console.log(`Created new contact: ${contact.full_name}`);
+            console.log(`Created new contact: ${contact.name}`);
         }
 
         return person;
