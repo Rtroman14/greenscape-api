@@ -10,7 +10,7 @@ module.exports = async (newContact) => {
     let person = await pipedrivePerson(newContact);
 
     if (person.organization === null || person.org_id === null) {
-        const organization = await pipedriveOrganization(newContact);
+        const organization = await pipedriveOrganization(newContact.address1);
 
         const updatedFields = JSON.stringify({ org_id: organization.id });
         person = await Pipedrive.updatePerson(person.id, updatedFields);

@@ -93,4 +93,34 @@ module.exports = {
             postalCode: contact["Zip Code"] || "",
         };
     },
+
+    orgInfo(address) {
+        let org = {};
+
+        org.address = address;
+
+        let [city, state, zip] = address.split(" ").slice(-3);
+        org.city = city.replace(",", "");
+        org.state = state;
+        org.zip = zip;
+
+        address = address.split(" ").slice(0, -3).join(" ");
+
+        if (address.includes("-")) {
+            const dashIndex = address.indexOf("-");
+
+            let name = address.slice(dashIndex).trim();
+            let street = address.slice(0, dashIndex).trim();
+
+            org.name = name.replace("-", "").trim();
+            org.street = street.replace("-", "").trim();
+        } else {
+            org.name = address;
+            org.street = address;
+        }
+
+        org.fullAddress = `${org.street}, ${org.city}, ${org.state} ${org.zip}`;
+
+        return org;
+    },
 };

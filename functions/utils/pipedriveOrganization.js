@@ -3,11 +3,15 @@ require("dotenv").config();
 const PipedriveApi = require("./Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
-module.exports = async (contact) => {
+const { orgInfo } = require("../../src/helpers");
+
+module.exports = async (address) => {
     try {
         // const foundUser = await findUser("Ryan Roman");
 
-        let organization = await Pipedrive.findOrganization(contact.address1);
+        const org = orgInfo(address);
+
+        let organization = await Pipedrive.findOrganization(org.street);
 
         if (!organization) {
             const category = await Pipedrive.getOrganizationFields("Category");
@@ -15,8 +19,8 @@ module.exports = async (contact) => {
             const property = category.options.find((option) => option.label === "Property");
 
             const newOrganization = JSON.stringify({
-                name: `${contact.name} - ${contact.address1}`,
-                address: contact.address1,
+                name: org.name,
+                address: org.fullAddress,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,
             });

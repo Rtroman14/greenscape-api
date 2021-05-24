@@ -72,42 +72,36 @@ const newContact = {
             let contacts = await Airtable.getContacts(campaign["Base ID"], view);
 
             for (let contact of contacts.slice(0, 10)) {
+                let org = {};
+
                 const highLevelContact = mapContact(contact);
                 let address = highLevelContact.address1;
 
-                let city = "Raleigh";
+                org.address = address;
 
-                console.log(address);
+                let [city, state, zip] = address.split(" ").slice(-3);
+                org.city = city.replace(",", "");
+                org.state = state;
+                org.zip = zip;
 
-                if (address.includes(city)) {
-                    let cityIndex = address.indexOf(city);
-
-                    if (address.split(city).length > 2) {
-                        cityIndex = address.indexOf(city, address.indexOf(city) + 1);
-                    }
-                    address = address.slice(0, cityIndex).trim();
-                }
+                address = address.split(" ").slice(0, -3).join(" ");
 
                 if (address.includes("-")) {
-                    const dashIndex = address.indexOf("-") + 1;
+                    const dashIndex = address.indexOf("-");
 
-                    address = address.slice(dashIndex).trim();
+                    let name = address.slice(dashIndex).trim();
+                    let street = address.slice(0, dashIndex).trim();
 
-                    if (address.includes(",")) {
-                        const commaIndex = address.indexOf(",");
-                        address = address.slice(0, commaIndex).trim();
-                    }
+                    org.name = name.replace("-", "").trim();
+                    org.street = street.replace("-", "").trim();
+                } else {
+                    org.name = address;
+                    org.street = address;
                 }
 
-                console.log(address);
+                org.fullAddress = `${org.street}, ${org.city}, ${org.state} ${org.zip}`;
 
-                // return {
-                //     name:,
-                //     street:,
-                //     city: ,
-                //     state:,
-                //     zip:
-                // }
+                console.log(org);
             }
         }
     } catch (error) {
