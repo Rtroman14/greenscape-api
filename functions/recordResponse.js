@@ -21,7 +21,7 @@ exports.handler = async (event) => {
         );
 
         for (let crmCampaign of crmCampaigns) {
-            const contact = await Airtable.findTextContact(crmCampaign["Base ID"], full_name);
+            const contact = await Airtable.findContact(crmCampaign["Base ID"], full_name);
 
             if (contact && !("Responded" in contact)) {
                 const Status = responseStatus(message.body);

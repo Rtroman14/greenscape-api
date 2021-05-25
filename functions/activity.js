@@ -2,9 +2,6 @@ require("dotenv").config();
 
 const moment = require("moment");
 
-const pipedrivePerson = require("./utils/pipedrivePerson");
-const pipedriveOrganization = require("./utils/pipedriveOrganization");
-
 const PipedriveApi = require("./utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
@@ -20,6 +17,9 @@ exports.handler = async (event) => {
         const dueDate = moment(contact.meetingTime).format("YYYY-MM-DD");
         const dueTime = moment(contact.meetingTime).format("hh-mm");
 
+        console.log({ dueDate });
+        console.log({ dueTime });
+
         const person = await Pipedrive.findPersonName(contact.name);
 
         let deal = await Pipedrive.deal(person.organization.name, person.id);
@@ -34,6 +34,7 @@ exports.handler = async (event) => {
             assigned_to_user_id: 12305968,
             due_date: dueDate,
             due_time: dueTime,
+            duration: "01:00",
         });
         const newActivity = await Pipedrive.createActivity(activity);
 
