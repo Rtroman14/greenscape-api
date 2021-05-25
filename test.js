@@ -11,6 +11,8 @@ const HighlevelApi = require("./src/Highlevel");
 const pipedrivePerson = require("./functions/utils/pipedrivePerson");
 const pipedriveOrganization = require("./functions/utils/pipedriveOrganization");
 
+const { slackNotification } = require("./functions/utils/helpers");
+
 const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require("./src/helpers");
 
 // const newContact = {
