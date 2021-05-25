@@ -27,14 +27,18 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async dealByID(dealID) {
+    async deal(term, personID) {
         try {
-            const config = this.getConfig("get", `deals/${dealID}?`);
+            const config = this.getConfig(
+                "get",
+                `deals/search?term=${term}&person_id=${personID}&`
+            );
             const res = await axios(config);
 
-            return res.data.data;
+            return res.data.data.items[0].item;
         } catch (error) {
-            console.log("ERROR GETTING DEAL ID ---", error);
+            console.log("ERROR GETTING DEALS ---", error);
+            return false;
         }
     }
 

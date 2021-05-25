@@ -59,16 +59,29 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
 
 (async () => {
     try {
-        // const newContact = {
-        //     name: "Ryan Roman",
-        //     email: "ryan@summamedia.co",
-        //     phone: "7152525716",
-        // };
-        // let person = await pipedrivePerson(newContact);
-        // let deal = await Pipedrive.findPersonID(person.id);
-        // console.log(deal);
+        const newContact = {
+            full_name: "Chris Pendy",
+            email: "ryan@summamedia.co",
+            phone: "7152525716",
+        };
+        let person = await pipedrivePerson(newContact);
+        // let deal = await Pipedrive.deal("asdf", "d");
+        let deal = await Pipedrive.deal(person.organization.name, person.id);
 
-        await slackNotification("Another test");
+        // create activity associated with all 3 items and assign BDM
+        const activity = JSON.stringify({
+            subject: "Discovery Call Title",
+            person_id: deal.person.id,
+            org_id: deal.organization.id,
+            deal_id: deal.id,
+            type: "discovery_call",
+            assigned_to_user_id: 12305968,
+            due_date: "2021-06-20",
+            due_time: "10:00",
+        });
+        const newActivity = await Pipedrive.createActivity(activity);
+
+        console.log(newActivity);
     } catch (error) {
         console.log(error.message);
     }

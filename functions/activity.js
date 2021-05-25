@@ -13,18 +13,18 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const newContact = JSON.parse(event.body);
+        const contact = JSON.parse(event.body);
 
-        let person = await pipedrivePerson(newContact);
+        const person = await Pipedrive.findPersonName(contact.name);
 
-        let deal = await Pipedrive.findPersonID(person.id);
+        let deal = await Pipedrive.deal(person.organization.name, person.id);
 
         // create activity associated with all 3 items and assign BDM
         const activity = JSON.stringify({
             subject: "Discovery Call Title",
-            person_id: person.id,
-            org_id: organizationID,
-            deal_id: newDeal.id,
+            person_id: deal.person.id,
+            org_id: deal.organization.id,
+            deal_id: deal.id,
             type: "discovery_call",
             assigned_to_user_id: 12305968,
             due_date: "2021-06-20",
@@ -34,7 +34,7 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ newDeal }),
+            body: JSON.stringify({ newActivity }),
         };
     } else {
         return {
