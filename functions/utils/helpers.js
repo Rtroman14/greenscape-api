@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const axios = require("axios");
 const { coldPhrase, coldWord } = require("./keywords");
 
 const PipedriveApi = require("./Pipedrive");

@@ -57,17 +57,14 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
 
 (async () => {
     try {
-        const newContact = {
-            name: "Ryan Roman",
-            email: "ryan@summamedia.co",
-            phone: "7152525716",
-        };
-
-        let person = await pipedrivePerson(newContact);
-
-        let deal = await Pipedrive.findPersonID(person.id);
-
-        console.log(deal);
+        // const newContact = {
+        //     name: "Ryan Roman",
+        //     email: "ryan@summamedia.co",
+        //     phone: "7152525716",
+        // };
+        // let person = await pipedrivePerson(newContact);
+        // let deal = await Pipedrive.findPersonID(person.id);
+        // console.log(deal);
     } catch (error) {
         console.log(error.message);
     }
