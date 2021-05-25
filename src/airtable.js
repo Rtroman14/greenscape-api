@@ -87,7 +87,7 @@ module.exports = class AirtableApi {
         }
     }
 
-    async findTextContact(baseID, fullName) {
+    async findContact(baseID, fullName) {
         try {
             const base = await this.assignAirtable(baseID);
 

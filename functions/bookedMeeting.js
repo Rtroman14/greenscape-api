@@ -6,6 +6,9 @@ const pipedriveOrganization = require("./utils/pipedriveOrganization");
 const PipedriveApi = require("./utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
+const AirtableApi = require("../src/airtable");
+const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
+
 exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
         return {
@@ -50,6 +53,13 @@ exports.handler = async (event) => {
         const label = await Pipedrive.getPersonFields("Label", "Hot lead");
         const updatedFields = JSON.stringify({ label: label.id });
         await Pipedrive.updatePerson(person.id, updatedFields);
+
+        // update airtable status === "Booked Meeting"
+        const contact = await Airtable.findContact("appmM3CeWXWjEauGe", person.name);
+        contact &&
+            (await Airtable.updateContact("appmM3CeWXWjEauGe", contact.recordID, {
+                Status: "Booked Meeting",
+            }));
 
         return {
             statusCode: 200,
