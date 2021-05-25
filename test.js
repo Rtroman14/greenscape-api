@@ -13,103 +13,61 @@ const pipedriveOrganization = require("./functions/utils/pipedriveOrganization")
 
 const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require("./src/helpers");
 
-const newContact = {
-    contact_id: "sRqF0l6lOCIzaucfhwDI",
-    first_name: "Danae",
-    last_name: "McDorment",
-    full_name: "Ryan Roman",
-    email: "Danae@sumammedia.co",
-    phone: "+19196066779",
-    tags: "",
-    address1: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
-    country: "US",
-    date_created: "2021-05-14T18:42:22.595Z",
-    contact_source: "api v1",
-    full_address: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
-    contact_type: "lead",
-    opportunity_name: "Robert Hoyt - How did you get my number?",
-    status: "open",
-    opportunity_source: "api v1",
-    source: "api v1",
-    pipleline_stage: "Responded",
-    pipeline_id: "dGRUoKNGZ8Nazik6ZpjC",
-    id: "dGRUoKNGZ8Nazik6ZpjC",
-    pipeline_name: "Revived Lost Leads Campaign",
-    owner: "Chris Pegram",
-    location: {
-        name: "Greenscape, Inc",
-        address: "107 Southerland Street",
-        city: "Durham",
-        state: "NC",
-        country: "US",
-        postalCode: "27703",
-        fullAddress: "107 Southerland Street, Durham NC 27703",
-        id: "H0BFl71Jcm86p91ahJtU",
-    },
-    user: {
-        firstName: "Chris",
-        lastName: "Pegram",
-        email: "cpegram@replies.greenscapeinc.com",
-        phone: "+19196095869",
-        extension: "",
-    },
-};
+// const newContact = {
+//     contact_id: "sRqF0l6lOCIzaucfhwDI",
+//     first_name: "Danae",
+//     last_name: "McDorment",
+//     full_name: "Ryan Roman",
+//     email: "Danae@sumammedia.co",
+//     phone: "+19196066779",
+//     tags: "",
+//     address1: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
+//     country: "US",
+//     date_created: "2021-05-14T18:42:22.595Z",
+//     contact_source: "api v1",
+//     full_address: "2241 Avent Ferry Rd - Burger King Raleigh, NC 27606",
+//     contact_type: "lead",
+//     opportunity_name: "Robert Hoyt - How did you get my number?",
+//     status: "open",
+//     opportunity_source: "api v1",
+//     source: "api v1",
+//     pipleline_stage: "Responded",
+//     pipeline_id: "dGRUoKNGZ8Nazik6ZpjC",
+//     id: "dGRUoKNGZ8Nazik6ZpjC",
+//     pipeline_name: "Revived Lost Leads Campaign",
+//     owner: "Chris Pegram",
+//     location: {
+//         name: "Greenscape, Inc",
+//         address: "107 Southerland Street",
+//         city: "Durham",
+//         state: "NC",
+//         country: "US",
+//         postalCode: "27703",
+//         fullAddress: "107 Southerland Street, Durham NC 27703",
+//         id: "H0BFl71Jcm86p91ahJtU",
+//     },
+//     user: {
+//         firstName: "Chris",
+//         lastName: "Pegram",
+//         email: "cpegram@replies.greenscapeinc.com",
+//         phone: "+19196095869",
+//         extension: "",
+//     },
+// };
 
 (async () => {
     try {
-        const getCampaigns = await Airtable.getCampaigns();
-        let campaigns = liveCampaigns(getCampaigns);
-        campaigns = campaignsDueToday(campaigns);
-        campaigns = campaignsToRun(campaigns);
+        const newContact = {
+            name: "Ryan Roman",
+            email: "ryan@summamedia.co",
+            phone: "7152525716",
+        };
 
-        for (let campaign of campaigns) {
-            let view = "First Lines";
+        let person = await pipedrivePerson(newContact);
 
-            if ("Tag" in campaign) {
-                view = `First Lines - ${campaign.Tag}`;
-            }
+        let deal = await Pipedrive.findPersonID(person.id);
 
-            let contacts = await Airtable.getContacts(campaign["Base ID"], view);
-
-            for (let contact of contacts.slice(0, 10)) {
-                const highLevelContact = mapContact(contact);
-                let address = highLevelContact.address1;
-
-                let city = "Raleigh";
-
-                console.log(address);
-
-                if (address.includes(city)) {
-                    let cityIndex = address.indexOf(city);
-
-                    if (address.split(city).length > 2) {
-                        cityIndex = address.indexOf(city, address.indexOf(city) + 1);
-                    }
-                    address = address.slice(0, cityIndex).trim();
-                }
-
-                if (address.includes("-")) {
-                    const dashIndex = address.indexOf("-") + 1;
-
-                    address = address.slice(dashIndex).trim();
-
-                    if (address.includes(",")) {
-                        const commaIndex = address.indexOf(",");
-                        address = address.slice(0, commaIndex).trim();
-                    }
-                }
-
-                console.log(address);
-
-                // return {
-                //     name:,
-                //     street:,
-                //     city: ,
-                //     state:,
-                //     zip:
-                // }
-            }
-        }
+        console.log(deal);
     } catch (error) {
         console.log(error.message);
     }

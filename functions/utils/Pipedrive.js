@@ -89,7 +89,7 @@ module.exports = class PipeDriveApi {
             const config = this.getConfig("get", `persons/${id}?`);
             const res = await axios(config);
 
-            const person = res.data.data;
+            const person = res.data;
 
             return person;
         } catch (error) {

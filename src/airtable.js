@@ -17,11 +17,11 @@ module.exports = class AirtableApi {
         }
     }
 
-    async getCampaigns() {
+    async getCampaigns(view) {
         try {
             const base = await this.assignAirtable("appGB7S9Wknu6MiQb");
 
-            const res = await base("Campaigns").select({ view: "CRM" }).firstPage();
+            const res = await base("Campaigns").select({ view }).firstPage();
 
             const campaigns = res.map((campaign) => {
                 return {
@@ -87,24 +87,25 @@ module.exports = class AirtableApi {
         }
     }
 
-    // async findBy(baseID) {
-    //     try {
-    //         const base = await this.assignAirtable(baseID);
+    async findTextContact(baseID, fullName) {
+        try {
+            const base = await this.assignAirtable(baseID);
 
-    //         const res = await base("First Line Ready")
-    //             .select({
-    //                 filterByFormula: `({Email} = "elon7489@elonmgmt.com")`,
-    //             })
-    //             .firstPage();
+            const res = await base("First Line Ready")
+                .select({
+                    maxRecords: 10,
+                    filterByFormula: `AND(({Full Name} = "${fullName}"))`,
+                })
+                .firstPage();
 
-    //         const contacts = res.map((contact) => ({
-    //             ...contact.fields,
-    //             recordID: contact.getId(),
-    //         }));
+            const contacts = res.map((contact) => ({
+                ...contact.fields,
+                recordID: contact.getId(),
+            }));
 
-    //         return contacts.length > 0 ? contacts : false;
-    //     } catch (error) {
-    //         console.log("ERROR GETCONTACTS() ---", error);
-    //     }
-    // }
+            return contacts.length > 0 ? contacts[0] : false;
+        } catch (error) {
+            console.log("ERROR FINDTEXTCONTACTS() ---", error);
+        }
+    }
 };
