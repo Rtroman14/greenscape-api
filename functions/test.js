@@ -5,6 +5,8 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
+        console.log(event);
+
         return {
             statusCode: 200,
             body: JSON.stringify({ event }),

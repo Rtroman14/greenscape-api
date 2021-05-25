@@ -67,6 +67,8 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
         // let person = await pipedrivePerson(newContact);
         // let deal = await Pipedrive.findPersonID(person.id);
         // console.log(deal);
+
+        await slackNotification("Another test");
     } catch (error) {
         console.log(error.message);
     }

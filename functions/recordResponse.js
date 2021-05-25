@@ -47,6 +47,10 @@ exports.handler = async (event) => {
                     (await slackNotification(
                         `\nClient: ${crmCampaign.Client}\nCampaign: ${campaign.name} \nFrom: ${full_name} \nResponse: ${message.body}\n`
                     ));
+
+                if (Status === "Cold") {
+                    // add to Remove From Campaign stage
+                }
             }
         }
 

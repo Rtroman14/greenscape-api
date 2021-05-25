@@ -22,7 +22,7 @@ const numContacts = 10;
 
 (async () => {
     try {
-        const getCampaigns = await Airtable.getCampaigns();
+        const getCampaigns = await Airtable.getCampaigns("CRM");
         let campaigns = liveCampaigns(getCampaigns);
         campaigns = campaignsDueToday(campaigns);
         campaigns = campaignsToRun(campaigns);
