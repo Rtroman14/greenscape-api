@@ -14,11 +14,8 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const contact = JSON.parse(event.body);
 
-        const dueDate = moment(contact.meetingTime).format("YYYY-MM-DD");
-        const dueTime = moment(contact.meetingTime).format("hh-mm");
-
-        console.log({ dueDate });
-        console.log({ dueTime });
+        const utcDate = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("YYYY-MM-DD");
+        const utcTime = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("hh:mm");
 
         const person = await Pipedrive.findPersonName(contact.name);
 
@@ -32,8 +29,8 @@ exports.handler = async (event) => {
             deal_id: deal.id,
             type: "discovery_call",
             assigned_to_user_id: 12305968,
-            due_date: dueDate,
-            due_time: dueTime,
+            due_date: utcDate,
+            due_time: utcTime,
             duration: "01:00",
         });
         const newActivity = await Pipedrive.createActivity(activity);

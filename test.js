@@ -66,16 +66,36 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
             meetingTime: "2021-05-26T19:44:00.000Z",
         };
 
-        const dates = {
-            due_date: "2021-06-20",
-            due_time: "10:00",
-        };
+        // const dueDate = moment(res.meetingTime).format("YYYY-MM-DD");
+        // const dueTime = moment(res.meetingTime).format("hh:mm");
+        // const date = new Date(res.meetingTime);
 
-        const dueDate = moment(res.meetingTime).format("YYYY-MM-DD");
-        const dueTime = moment(res.meetingTime).format("hh-mm");
+        // console.log({ dueDate });
+        // console.log({ dueTime });
+        // console.log(date);
 
-        console.log(dueDate);
-        console.log(dueTime);
+        const utcDate = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("YYYY-MM-DD");
+        const utcTime = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("hh:mm");
+
+        console.log({ utcDate });
+        console.log({ utcTime });
+
+        // const time = moment(utcTime)
+
+        const activity = JSON.stringify({
+            subject: "Discovery Call Title",
+            person_id: 1,
+            org_id: 1,
+            deal_id: 11,
+            type: "discovery_call",
+            assigned_to_user_id: 12305968,
+            due_date: utcDate,
+            due_time: utcTime,
+            duration: "01:00",
+        });
+        const newActivity = await Pipedrive.createActivity(activity);
+
+        console.log(newActivity);
     } catch (error) {
         console.log(error.message);
     }
