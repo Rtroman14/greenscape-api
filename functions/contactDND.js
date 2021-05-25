@@ -27,6 +27,13 @@ exports.handler = async (event) => {
         const updatedFields = JSON.stringify({ label: dndField.id });
         await Pipedrive.updatePerson(person.id, updatedFields);
 
+        // update airtable status === "Cold"
+        const contact = await Airtable.findContact("appmM3CeWXWjEauGe", person.name);
+        contact &&
+            (await Airtable.updateContact("appmM3CeWXWjEauGe", contact.recordID, {
+                Status: "Cold",
+            }));
+
         return {
             statusCode: 200,
             body: JSON.stringify({ newNote }),
