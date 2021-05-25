@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const moment = require("moment");
+
 const { findUser } = require("./functions/utils/helpers");
 
 const PipedriveApi = require("./functions/utils/Pipedrive");
@@ -59,29 +61,21 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
 
 (async () => {
     try {
-        const newContact = {
-            full_name: "Chris Pendy",
-            email: "ryan@summamedia.co",
-            phone: "7152525716",
+        const res = {
+            name: "Gordon Grubb",
+            meetingTime: "2021-05-26T19:44:00.000Z",
         };
-        let person = await pipedrivePerson(newContact);
-        // let deal = await Pipedrive.deal("asdf", "d");
-        let deal = await Pipedrive.deal(person.organization.name, person.id);
 
-        // create activity associated with all 3 items and assign BDM
-        const activity = JSON.stringify({
-            subject: "Discovery Call Title",
-            person_id: deal.person.id,
-            org_id: deal.organization.id,
-            deal_id: deal.id,
-            type: "discovery_call",
-            assigned_to_user_id: 12305968,
+        const dates = {
             due_date: "2021-06-20",
             due_time: "10:00",
-        });
-        const newActivity = await Pipedrive.createActivity(activity);
+        };
 
-        console.log(newActivity);
+        const dueDate = moment(res.meetingTime).format("YYYY-MM-DD");
+        const dueTime = moment(res.meetingTime).format("hh-mm");
+
+        console.log(dueDate);
+        console.log(dueTime);
     } catch (error) {
         console.log(error.message);
     }

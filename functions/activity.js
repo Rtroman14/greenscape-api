@@ -15,6 +15,9 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const contact = JSON.parse(event.body);
 
+        const dueDate = moment(contact.meetingTime).format("YYYY-MM-DD");
+        const dueTime = moment(contact.meetingTime).format("hh-mm");
+
         const person = await Pipedrive.findPersonName(contact.name);
 
         let deal = await Pipedrive.deal(person.organization.name, person.id);
@@ -27,8 +30,8 @@ exports.handler = async (event) => {
             deal_id: deal.id,
             type: "discovery_call",
             assigned_to_user_id: 12305968,
-            due_date: "2021-06-20",
-            due_time: "10:00",
+            due_date: dueDate,
+            due_time: dueTime,
         });
         const newActivity = await Pipedrive.createActivity(activity);
 
