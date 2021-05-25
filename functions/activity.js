@@ -14,8 +14,10 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const contact = JSON.parse(event.body);
 
-        const utcDate = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("YYYY-MM-DD");
-        const utcTime = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("hh:mm");
+        const utcDate = new moment(contact.meetingTime, "YYYY-MM-DDTHH:mm")
+            .utc()
+            .format("YYYY-MM-DD");
+        const utcTime = new moment(contact.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("hh:mm");
 
         const person = await Pipedrive.findPersonName(contact.name);
 
