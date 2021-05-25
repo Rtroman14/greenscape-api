@@ -5,11 +5,13 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        console.log(event);
+        const res = JSON.parse(event.body);
+
+        console.log(res);
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ event }),
+            body: JSON.stringify({ res }),
         };
     } else {
         return {
