@@ -282,7 +282,7 @@ const deal = {
                 const date = moment(deal.current.add_time).format("dddd, MMMM Do YYYY");
 
                 const note = JSON.stringify({
-                    content: `${deal.current.person_name} with Organization: ${
+                    content: `${deal.current.person_name} with ${
                         deal.current.org_name || "empty"
                     } was sent to outreach campaign: ${campaign.name} on ${date}`,
                     deal_id: deal.current.id,
