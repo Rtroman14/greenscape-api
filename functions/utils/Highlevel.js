@@ -48,11 +48,11 @@ module.exports = class HighLevel {
         }
     }
 
-    async getContact(email) {
+    async getContact(email, phone) {
         try {
             const config = this.getConfig(
                 "get",
-                `https://rest.gohighlevel.com/v1/contacts/lookup?email=${email}`
+                `https://rest.gohighlevel.com/v1/contacts/lookup?email=${email}&phone=+1${phone}`
             );
 
             const res = await axios(config);
@@ -71,7 +71,7 @@ module.exports = class HighLevel {
 
             const res = await axios(config);
 
-            return res.data;
+            return res.data.pipelines;
         } catch (error) {
             console.log("ERROR GETCONTACT ---", error);
 
@@ -89,6 +89,22 @@ module.exports = class HighLevel {
             const res = await axios(config);
 
             return res.data;
+        } catch (error) {
+            console.log("ERROR GETCONTACT ---", error);
+
+            return [];
+        }
+    }
+    async getCampaigns() {
+        try {
+            const config = this.getConfig(
+                "get",
+                `https://rest.gohighlevel.com/v1/campaigns/?status=published`
+            );
+
+            const res = await axios(config);
+
+            return res.data.campaigns;
         } catch (error) {
             console.log("ERROR GETCONTACT ---", error);
 
@@ -154,6 +170,20 @@ module.exports = class HighLevel {
             newOpportunity && console.log(newOpportunity);
         } catch (error) {
             console.log("ERROR NEWPIPELINEOPPORTUNITY ---", error);
+        }
+    }
+
+    async addToCampaign(contactID, campaignID) {
+        try {
+            const config = this.getConfig(
+                "post",
+                `https://rest.gohighlevel.com/v1/contacts/${contactID}/campaigns/${campaignID}`
+            );
+
+            const res = await axios(config);
+            return res;
+        } catch (error) {
+            console.log("ERROR ADDTOCAMPAIGN ---", error);
         }
     }
 };

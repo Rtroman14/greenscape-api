@@ -53,12 +53,16 @@ module.exports = class PipeDriveApi {
         }
     }
 
-    async dealFields() {
+    async dealFields(fieldName) {
         try {
             const config = this.getConfig("get", `dealFields/?`);
             const res = await axios(config);
 
-            return res.data.data;
+            const data = res.data.data;
+
+            const options = data.find((field) => field.name === fieldName);
+
+            return options;
         } catch (error) {
             console.log("ERROR GETTING DEAL FIELDS ---", error);
         }
@@ -93,7 +97,7 @@ module.exports = class PipeDriveApi {
             const config = this.getConfig("get", `persons/${id}?`);
             const res = await axios(config);
 
-            const person = res.data;
+            const person = res.data.data;
 
             return person;
         } catch (error) {
@@ -166,8 +170,6 @@ module.exports = class PipeDriveApi {
             const data = res.data.data;
 
             const options = data.find((field) => field.name === fieldName).options;
-
-            console.log(options);
 
             return options.find((option) => option.label === label);
         } catch (error) {

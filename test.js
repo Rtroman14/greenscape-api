@@ -8,7 +8,8 @@ const PipedriveApi = require("./functions/utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 const AirtableApi = require("./src/airtable");
 const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
-const HighlevelApi = require("./src/Highlevel");
+const HighlevelApi = require("./functions/utils/Highlevel");
+const HighLevel = new HighlevelApi(process.env.HIGHLEVEL_API);
 
 const pipedrivePerson = require("./functions/utils/pipedrivePerson");
 const pipedriveOrganization = require("./functions/utils/pipedriveOrganization");
@@ -59,43 +60,204 @@ const { campaignsDueToday, liveCampaigns, campaignsToRun, mapContact } = require
 //     },
 // };
 
+const deal = {
+    v: 1,
+    matches_filters: { current: [] },
+    meta: {
+        v: 1,
+        action: "updated",
+        object: "deal",
+        id: 19,
+        company_id: 8023165,
+        user_id: 12305968,
+        host: "summamedia.pipedrive.com",
+        timestamp: 1622130341,
+        timestamp_micro: 1622130341802813,
+        request_timestamp: 1622130341726,
+        permitted_user_ids: [12305968],
+        trans_pending: false,
+        is_bulk_update: false,
+        pipedrive_service_name: null,
+        change_source: "app",
+        wa_bookmark_id: null,
+        matches_filters: { current: [] },
+        prepublish_timestamp: 1622130341853,
+        webhook_id: "492035",
+    },
+    current: {
+        id: 19,
+        creator_user_id: 12305968,
+        user_id: 12305968,
+        person_id: 29,
+        org_id: 29,
+        stage_id: 1,
+        title: "Phase II",
+        value: 0,
+        currency: "USD",
+        add_time: "2021-05-27 15:28:40",
+        update_time: "2021-05-27 15:45:41",
+        stage_change_time: null,
+        active: true,
+        deleted: false,
+        status: "open",
+        probability: null,
+        next_activity_date: null,
+        next_activity_time: null,
+        next_activity_id: null,
+        last_activity_id: null,
+        last_activity_date: null,
+        lost_reason: null,
+        visible_to: "3",
+        close_time: null,
+        pipeline_id: 1,
+        won_time: null,
+        first_won_time: null,
+        lost_time: null,
+        products_count: 0,
+        files_count: 0,
+        notes_count: 0,
+        followers_count: 1,
+        email_messages_count: 0,
+        activities_count: 0,
+        done_activities_count: 0,
+        undone_activities_count: 0,
+        participants_count: 1,
+        expected_close_date: null,
+        last_incoming_mail_time: null,
+        last_outgoing_mail_time: null,
+        label: null,
+        renewal_type: "one_time",
+        "38b90adfeffed7b1cb6910b9b7724f12875a5730": "15",
+        stage_order_nr: 0,
+        person_name: "Chris Pendy",
+        org_name: "Phase II",
+        next_activity_subject: null,
+        next_activity_type: null,
+        next_activity_duration: null,
+        next_activity_note: null,
+        group_id: null,
+        group_name: null,
+        formatted_value: "$0",
+        weighted_value: 0,
+        formatted_weighted_value: "$0",
+        weighted_value_currency: "USD",
+        rotten_time: null,
+        owner_name: "Nick Peret",
+        cc_email: "summamedia+deal19@pipedrivemail.com",
+        org_hidden: false,
+        person_hidden: false,
+    },
+    previous: {
+        id: 19,
+        creator_user_id: 12305968,
+        user_id: 12305968,
+        person_id: 29,
+        org_id: 29,
+        stage_id: 1,
+        title: "Phase II",
+        value: 0,
+        currency: "USD",
+        add_time: "2021-05-27 15:28:40",
+        update_time: "2021-05-27 15:28:40",
+        stage_change_time: null,
+        active: true,
+        deleted: false,
+        status: "open",
+        probability: null,
+        next_activity_date: null,
+        next_activity_time: null,
+        next_activity_id: null,
+        last_activity_id: null,
+        last_activity_date: null,
+        lost_reason: null,
+        visible_to: "3",
+        close_time: null,
+        pipeline_id: 1,
+        won_time: null,
+        first_won_time: null,
+        lost_time: null,
+        products_count: 0,
+        files_count: 0,
+        notes_count: 0,
+        followers_count: 1,
+        email_messages_count: 0,
+        activities_count: 0,
+        done_activities_count: 0,
+        undone_activities_count: 0,
+        participants_count: 1,
+        expected_close_date: null,
+        last_incoming_mail_time: null,
+        last_outgoing_mail_time: null,
+        label: null,
+        renewal_type: "one_time",
+        "38b90adfeffed7b1cb6910b9b7724f12875a5730": null,
+        stage_order_nr: 0,
+        person_name: "Chris Pendy",
+        org_name: "Phase II",
+        next_activity_subject: null,
+        next_activity_type: null,
+        next_activity_duration: null,
+        next_activity_note: null,
+        group_id: null,
+        group_name: null,
+        formatted_value: "$0",
+        weighted_value: 0,
+        formatted_weighted_value: "$0",
+        weighted_value_currency: "USD",
+        rotten_time: null,
+        owner_name: "Nick Peret",
+        cc_email: "summamedia+deal19@pipedrivemail.com",
+        org_hidden: false,
+        person_hidden: false,
+    },
+    event: "updated.deal",
+    retry: 0,
+};
+
 (async () => {
     try {
-        const res = {
-            name: "Gordon Grubb",
-            meetingTime: "2021-05-26T19:44:00.000Z",
-        };
+        if (deal.current.stage_id === 1) {
+            const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
 
-        // const dueDate = moment(res.meetingTime).format("YYYY-MM-DD");
-        // const dueTime = moment(res.meetingTime).format("hh:mm");
-        // const date = new Date(res.meetingTime);
+            const triggerCampaignPrevious = deal.previous[triggerCampaign.key];
+            const triggerCampaignCurrent = deal.current[triggerCampaign.key];
 
-        // console.log({ dueDate });
-        // console.log({ dueTime });
-        // console.log(date);
+            const campaignOption = triggerCampaign.options.find(
+                (option) => option.id === Number(triggerCampaignCurrent)
+            );
 
-        const utcDate = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("YYYY-MM-DD");
-        const utcTime = new moment(res.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("hh:mm");
+            if (triggerCampaignPrevious !== triggerCampaignCurrent) {
+                const campaigns = [
+                    {
+                        name: "Missed Discovery Meeting",
+                        id: "123",
+                    },
+                    {
+                        name: "Missed Onsite Meeting",
+                        id: "456",
+                    },
+                ];
 
-        console.log({ utcDate });
-        console.log({ utcTime });
+                // get person
+                const person = await Pipedrive.findPersonID(deal.current.person_id);
 
-        // const time = moment(utcTime)
+                const [highLevelPerson] = await HighLevel.getContact(
+                    person.email[0].value,
+                    person.phone[0].value
+                );
 
-        const activity = JSON.stringify({
-            subject: "Discovery Call Title",
-            person_id: 1,
-            org_id: 1,
-            deal_id: 11,
-            type: "discovery_call",
-            assigned_to_user_id: 12305968,
-            due_date: utcDate,
-            due_time: utcTime,
-            duration: "01:00",
-        });
-        const newActivity = await Pipedrive.createActivity(activity);
+                // push highlevel person to appropriate campaign
+                const campaign = campaigns.find(
+                    (campaign) => campaign.name === campaignOption.label
+                );
+                const addedToCampaign = await HighLevel.addToCampaign(
+                    highLevelPerson.id,
+                    campaign.id
+                );
 
-        console.log(newActivity);
+                console.log(addedToCampaign);
+            }
+        }
     } catch (error) {
         console.log(error.message);
     }

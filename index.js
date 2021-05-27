@@ -79,7 +79,6 @@ const numContacts = 10;
 
                     await Airtable.updateCampaign(campaign.recordID, {
                         "Campaign Status": "Need More Contacts",
-                        "Last Updated": today,
                     });
 
                     await slackNotification(
