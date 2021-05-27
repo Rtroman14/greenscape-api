@@ -241,21 +241,39 @@ const deal = {
                 // get person
                 const person = await Pipedrive.findPersonID(deal.current.person_id);
 
-                const [highLevelPerson] = await HighLevel.getContact(
+                let highLevelPerson = await HighLevel.getContact(
                     person.email[0].value,
                     person.phone[0].value
                 );
+
+                if (!highLevelPerson) {
+                    const newHighLevelPerson = {
+                        firstName: person.first_name || "",
+                        lastName: person.last_name || "",
+                        name: person.name || "",
+                        email: person.email[0].value || "",
+                        phone: person.phone[0].value || "",
+                        address1: (person.org_id !== null && person.org_id.address) || "",
+                    };
+
+                    highLevelPerson = await HighLevel.createContact(newHighLevelPerson);
+
+                    console.log("NO HIGHLEVEL PERSON");
+                }
 
                 // push highlevel person to appropriate campaign
                 const campaign = campaigns.find(
                     (campaign) => campaign.name === campaignOption.label
                 );
+
                 const addedToCampaign = await HighLevel.addToCampaign(
                     highLevelPerson.id,
                     campaign.id
                 );
 
-                console.log(addedToCampaign);
+                console.log(
+                    `\nAdd ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
+                );
             }
         }
     } catch (error) {

@@ -57,11 +57,11 @@ module.exports = class HighLevel {
 
             const res = await axios(config);
 
-            return res.data.contacts;
+            return res.data.contacts[0];
         } catch (error) {
-            console.log("ERROR GETCONTACT ---", error);
+            console.log("ERROR GETCONTACT ---", error.message);
 
-            return [];
+            return false;
         }
     }
 
