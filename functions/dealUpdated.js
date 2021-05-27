@@ -56,14 +56,14 @@ exports.handler = async (event) => {
                 // console.log(addedToCampaign);
 
                 console.log(
-                    `Add ${deal.current.person_name} to Highlevel campaign: ${campaign.name}`
+                    `\nAdd ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
                 );
             }
         }
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ res }),
+            body: JSON.stringify({ deal }),
         };
     } else {
         return {
