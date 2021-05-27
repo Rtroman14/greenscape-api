@@ -24,7 +24,10 @@ exports.handler = async (event) => {
                 (option) => option.id === Number(triggerCampaignCurrent)
             );
 
-            if (triggerCampaignPrevious !== triggerCampaignCurrent) {
+            if (
+                triggerCampaignPrevious !== triggerCampaignCurrent &&
+                triggerCampaignCurrent !== null
+            ) {
                 const campaigns = [
                     {
                         name: "Missed Discovery Meeting",
@@ -72,6 +75,17 @@ exports.handler = async (event) => {
                 console.log(
                     `\nAdd ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
                 );
+
+                // create note
+                const date = moment(deal.current.add_time).format("dddd, MMMM Do YYYY");
+
+                const note = JSON.stringify({
+                    content: `${deal.current.person_name} with Organization: ${
+                        deal.current.org_name || "empty"
+                    } was sent to outreach campaign: ${campaign.name} on ${date}`,
+                    deal_id: deal.current.id,
+                });
+                await Pipedrive.createNote(note);
             }
         }
 

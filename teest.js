@@ -1,19 +1,5 @@
-require("dotenv").config();
+const moment = require("moment");
 
-const { findUser } = require("./functions/utils/helpers");
+const date = moment("2021-05-27 15:28:40").format("dddd, MMMM Do YYYY");
 
-const PipedriveApi = require("./functions/utils/Pipedrive");
-const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
-const AirtableApi = require("./src/airtable");
-const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
-const HighlevelApi = require("./functions/utils/Highlevel");
-const Highlevel = new HighlevelApi(process.env.HIGHLEVEL_API);
-
-(async () => {
-    try {
-        const campaigns = await Highlevel.getCampaigns();
-        console.log(campaigns);
-    } catch (error) {
-        console.log(error.message);
-    }
-})();
+console.log(date);
