@@ -9,7 +9,7 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 const AirtableApi = require("./src/airtable");
 const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
 const HighlevelApi = require("./functions/utils/Highlevel");
-const HighLevel = new HighlevelApi(process.env.HIGHLEVEL_API);
+const Highlevel = new HighlevelApi(process.env.HIGHLEVEL_API);
 
 const pipedrivePerson = require("./functions/utils/pipedrivePerson");
 const pipedriveOrganization = require("./functions/utils/pipedriveOrganization");
@@ -241,7 +241,7 @@ const deal = {
                 // get person
                 const person = await Pipedrive.findPersonID(deal.current.person_id);
 
-                let highLevelPerson = await HighLevel.getContact(
+                let highLevelPerson = await Highlevel.getContact(
                     person.email[0].value,
                     person.phone[0].value
                 );

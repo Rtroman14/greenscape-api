@@ -39,7 +39,7 @@ exports.handler = async (event) => {
                 // get person
                 const person = await Pipedrive.findPersonID(deal.current.person_id);
 
-                let highLevelPerson = await HighLevel.getContact(
+                let highLevelPerson = await Highlevel.getContact(
                     person.email[0].value,
                     person.phone[0].value
                 );
@@ -54,7 +54,7 @@ exports.handler = async (event) => {
                         address1: (person.org_id !== null && person.org_id.address) || "",
                     };
 
-                    highLevelPerson = await HighLevel.createContact(newHighLevelPerson);
+                    highLevelPerson = await Highlevel.createContact(newHighLevelPerson);
 
                     console.log("NO HIGHLEVEL PERSON");
                 }
