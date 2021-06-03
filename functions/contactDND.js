@@ -5,6 +5,9 @@ const pipedrivePerson = require("./utils/pipedrivePerson");
 const PipedriveApi = require("./utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
+const AirtableApi = require("../src/airtable");
+const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
+
 exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
         return {
