@@ -216,11 +216,8 @@ const deal = {
 
 (async () => {
     try {
-        const category = await Pipedrive.getOrganizationFields("Category");
-
-        const property = category.options.find((option) => option.label === "Property");
-
-        console.log(property);
+        const users = await Pipedrive.getAllUsers();
+        console.log(users);
     } catch (error) {
         console.log(error.message);
     }

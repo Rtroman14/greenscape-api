@@ -30,7 +30,7 @@ exports.handler = async (event) => {
             org_id: deal.organization.id,
             deal_id: deal.id,
             type: "discovery_call",
-            assigned_to_user_id: 12305968,
+            assigned_to_user_id: 12349318, // UPDATE TO CHRIS
             due_date: utcDate,
             due_time: utcTime,
             duration: "01:00",
