@@ -36,5 +36,3 @@ module.exports = async (address) => {
         return false;
     }
 };
-
-// NEED TO SET PROPERTY !!!!
