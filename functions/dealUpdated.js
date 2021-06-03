@@ -28,7 +28,7 @@ exports.handler = async (event) => {
 
             if (
                 triggerCampaignPrevious !== triggerCampaignCurrent &&
-                triggerCampaignCurrent === "15"
+                triggerCampaignCurrent !== null
             ) {
                 const campaigns = [
                     {

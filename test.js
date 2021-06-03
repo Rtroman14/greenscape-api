@@ -216,8 +216,9 @@ const deal = {
 
 (async () => {
     try {
-        const users = await Pipedrive.getAllUsers();
-        console.log(users);
+        const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
+
+        console.log(triggerCampaign);
     } catch (error) {
         console.log(error.message);
     }
