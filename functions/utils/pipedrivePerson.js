@@ -7,7 +7,9 @@ module.exports = async (contact) => {
     try {
         // const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
-        let person = await Pipedrive.findPersonName(contact.name);
+        let name = contact.full_name || contact.name;
+
+        let person = await Pipedrive.findPersonName(name);
 
         const label = await Pipedrive.getPersonFields("Label", "Prospect");
 
