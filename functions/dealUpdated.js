@@ -16,6 +16,7 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const deal = JSON.parse(event.body);
 
+        // IF DEAL === DISCOVERY MEETING || ONSITE MEETING
         if (deal.current.stage_id === 1) {
             const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
 
@@ -26,9 +27,12 @@ exports.handler = async (event) => {
                 (option) => option.id === Number(triggerCampaignCurrent)
             );
 
+            // IF DISCOVERY MEETING STAGE && triggerCampaignCurrent === DISCOVERY MEETING ID
+            // IF ONSITE MEETING STAGE && triggerCampaignCurrent === ONSITE MEETING ID
+
             if (
                 triggerCampaignPrevious !== triggerCampaignCurrent &&
-                triggerCampaignCurrent !== null
+                triggerCampaignCurrent !== null // campaign depends on stage
             ) {
                 const campaigns = [
                     {
@@ -75,7 +79,7 @@ exports.handler = async (event) => {
                 // );
 
                 console.log(
-                    `\nAdd ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
+                    `\nAdded ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
                 );
 
                 // create note
@@ -102,3 +106,8 @@ exports.handler = async (event) => {
         };
     }
 };
+
+// options: [
+//     { label: 'Missed Discovery Meeting', id: 18 },
+//     { label: 'Missed Onsite Meeting', id: 19 }
+//   ],

@@ -5,9 +5,9 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
 module.exports = async (contact) => {
     try {
-        // const foundUser = await findUser("Ryan Roman");
+        // const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
-        let person = await Pipedrive.findPersonName(contact.full_name);
+        let person = await Pipedrive.findPersonName(contact.name);
 
         const label = await Pipedrive.getPersonFields("Label", "Prospect");
 

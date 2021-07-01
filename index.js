@@ -18,7 +18,7 @@ const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
 
 const today = moment(new Date()).format("MM/DD/YYYY");
 
-const numContacts = 10;
+const numContacts = 1;
 
 (async () => {
     try {
@@ -26,6 +26,8 @@ const numContacts = 10;
         let campaigns = liveCampaigns(getCampaigns);
         campaigns = campaignsDueToday(campaigns);
         campaigns = campaignsToRun(campaigns);
+
+        campaigns = campaigns.filter((campaign) => campaign.Client === "Greenscape");
 
         for (let i = 0; i < numContacts; i++) {
             for (let campaign of campaigns) {
@@ -113,3 +115,11 @@ const numContacts = 10;
         console.log(error);
     }
 })();
+
+// 1. Add "await addToPipedrive(highLevelContact);" to textCampaign code
+//      a. Migrate all necessary code to textCampaign
+// 2. In pipedrivePerson.js --> find Chris Pegram, uncomment his id when creating person
+//      a. Change "visible_to" to all
+// 3. Update "const org = orgInfo(address);" in pipedriveOrganization.js
+//      a. Change "visible_to" to all
+// 4. Update .env variables

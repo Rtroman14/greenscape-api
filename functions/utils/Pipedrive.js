@@ -89,6 +89,7 @@ module.exports = class PipeDriveApi {
             return person.length > 0 ? person[0].item : false;
         } catch (error) {
             console.log("ERROR FINDING PERSON ---", error);
+            return false;
         }
     }
 
