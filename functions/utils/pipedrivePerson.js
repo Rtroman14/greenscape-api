@@ -7,15 +7,15 @@ module.exports = async (contact) => {
     try {
         // const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
-        let name = contact.full_name || contact.name;
+        let personName = contact.full_name || contact.name;
 
-        let person = await Pipedrive.findPersonName(name);
+        let person = await Pipedrive.findPersonName(personName);
 
         const label = await Pipedrive.getPersonFields("Label", "Prospect");
 
         if (!person) {
             const newPerson = JSON.stringify({
-                name: contact.name,
+                name: personName,
                 label: label.id,
                 // owner_id: foundUser.id,
                 // org_id: orgID,
@@ -26,7 +26,7 @@ module.exports = async (contact) => {
 
             person = await Pipedrive.createPerson(newPerson);
 
-            console.log(`Created new contact: ${contact.name}`);
+            console.log(`Created new contact: ${personName}`);
         }
 
         return person;
