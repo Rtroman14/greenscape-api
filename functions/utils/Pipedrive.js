@@ -139,6 +139,17 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async getUser(name) {
+        try {
+            const config = this.getConfig("get", `users/find?term=${name}&`);
+            const { data } = await axios(config);
+
+            return data.data[0];
+        } catch (error) {
+            console.log("ERROR GETTING USER ---", error);
+        }
+    }
+
     async findOrganization(address) {
         try {
             const config = this.getConfig("get", `organizations/search?term=${address}&`);

@@ -220,7 +220,9 @@ const deal = {
 
         // console.log(triggerCampaign);
 
-        await slackNotification("this is a test");
+        // await slackNotification("this is a test");
+        const user = await Pipedrive.getUser("Ryan Roman");
+        console.log(user);
     } catch (error) {
         console.log(error.message);
     }

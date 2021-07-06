@@ -7,7 +7,7 @@ const slackNotification = require("../../src/slackNotification");
 
 module.exports = async (contact) => {
     try {
-        const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
+        const user = await Pipedrive.getUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
         let personName = contact.full_name || contact.name;
 
@@ -19,7 +19,7 @@ module.exports = async (contact) => {
             const newPerson = JSON.stringify({
                 name: personName,
                 label: label.id,
-                owner_id: foundUser.id,
+                owner_id: user.id,
                 // org_id: orgID,
                 visible_to: "7", // verify in greenscape database
                 email: contact.email || "",

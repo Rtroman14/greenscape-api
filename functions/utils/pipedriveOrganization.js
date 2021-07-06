@@ -9,8 +9,6 @@ const { orgInfo } = require("../../src/helpers");
 
 module.exports = async (contact) => {
     try {
-        // const foundUser = await findUser("Ryan Roman");
-
         let org = {
             name: contact.street || "",
             address: contact.address1 || "",
@@ -28,7 +26,7 @@ module.exports = async (contact) => {
         let organization = await Pipedrive.findOrganization(org.street);
 
         if (!organization) {
-            const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
+            const user = await Pipedrive.getUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
             const category = await Pipedrive.getOrganizationFields("Category");
 
@@ -38,7 +36,7 @@ module.exports = async (contact) => {
 
             const newOrganization = JSON.stringify({
                 name: org.name,
-                owner_id: foundUser.id,
+                owner_id: user.id,
                 address: org.fullAddress,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,
