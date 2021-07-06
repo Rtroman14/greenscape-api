@@ -5,11 +5,23 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
 const { orgInfo } = require("../../src/helpers");
 
-module.exports = async (address) => {
+module.exports = async (contact) => {
     try {
         // const foundUser = await findUser("Ryan Roman");
 
-        const org = orgInfo(address);
+        let org = {
+            name: contact.street || "",
+            address: contact.address1 || "",
+            fullAddress: contact.address1 || "",
+            street: contact.street || "",
+            city: contact.city || "",
+            state: contact.state || "",
+            zip: contact.postalCode || "",
+        };
+
+        if (contact.street === "") {
+            org = orgInfo(contact.address1);
+        }
 
         let organization = await Pipedrive.findOrganization(org.street);
 

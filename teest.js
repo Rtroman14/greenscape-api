@@ -32,10 +32,12 @@ const numContacts = 1;
                 if (contact) {
                     const highLevelContact = mapContact(contact);
 
-                    await axios.post(
+                    const person = await axios.post(
                         "https://greenscape.netlify.app/.netlify/functions/addToPipedrive",
                         highLevelContact
                     );
+
+                    console.log("person", person);
                 }
             }
         }
