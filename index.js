@@ -122,4 +122,8 @@ const numContacts = 1;
 //      a. Change "visible_to" to all
 // 3. Update "const org = orgInfo(address);" in pipedriveOrganization.js
 //      a. Change "visible_to" to all
-// 4. Update .env variables
+// 4. Add Deals/Leads single select
+// 5. Add webhook for updated.deal --> https://greenscape.netlify.app/.netlify/functions/dealUpdated
+// 6. Update .env variables
+
+// MAKE FETCH REQUEST FROM TEXTCAMPAIGN APP TO THIS REPO
