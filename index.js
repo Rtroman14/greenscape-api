@@ -108,14 +108,14 @@ const numContacts = 1;
             await minutesWait(2);
         }
 
-        for (let campaign of campaigns) {
-            // run at the end of loop
-            await Airtable.updateCampaign(campaign.recordID, {
-                "Last Updated": today,
-            });
+        // for (let campaign of campaigns) {
+        //     // run at the end of loop
+        //     await Airtable.updateCampaign(campaign.recordID, {
+        //         "Last Updated": today,
+        //     });
 
-            await minutesWait(0.05);
-        }
+        //     await minutesWait(0.05);
+        // }
     } catch (error) {
         console.log(error);
     }

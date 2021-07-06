@@ -216,9 +216,11 @@ const deal = {
 
 (async () => {
     try {
-        const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
+        // const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
 
-        console.log(triggerCampaign);
+        // console.log(triggerCampaign);
+
+        await slackNotification("this is a test");
     } catch (error) {
         console.log(error.message);
     }
