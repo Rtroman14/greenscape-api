@@ -31,9 +31,9 @@ exports.handler = async (event) => {
         await Pipedrive.updatePerson(person.id, updatedFields);
 
         // update airtable status === "Cold"
-        const contact = await Airtable.findContact("appmM3CeWXWjEauGe", person.name);
+        const contact = await Airtable.findContact("appRGIOnGz04cUXz3", person.name);
         contact &&
-            (await Airtable.updateContact("appmM3CeWXWjEauGe", contact.recordID, {
+            (await Airtable.updateContact("appRGIOnGz04cUXz3", contact.recordID, {
                 Status: "Cold",
             }));
 

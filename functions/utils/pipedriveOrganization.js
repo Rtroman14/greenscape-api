@@ -30,9 +30,7 @@ module.exports = async (contact) => {
 
             const category = await Pipedrive.getOrganizationFields("Category");
 
-            const property = category.options.find(
-                (option) => option.label === "Property Management Company"
-            );
+            const property = category.options.find((option) => option.label === "Property");
 
             const newOrganization = JSON.stringify({
                 name: org.name,
