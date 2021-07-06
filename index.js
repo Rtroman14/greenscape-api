@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const moment = require("moment");
+const axios = require("axios");
 
 const AirtableApi = require("./src/airtable");
 const HighlevelApi = require("./src/Highlevel");
@@ -61,7 +62,11 @@ const numContacts = 1;
                             );
 
                             // create contact in pipedrive
-                            const person = await addToPipedrive(highLevelContact);
+                            // const person = await addToPipedrive(highLevelContact);
+                            await axios.post(
+                                "https://greenscape.netlify.app/.netlify/functions/addToPipedrive",
+                                highLevelContact
+                            );
                         }
                     } catch (error) {
                         // RUNS IF ERROR WHILE TEXTING

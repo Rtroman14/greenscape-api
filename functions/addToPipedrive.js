@@ -10,10 +10,11 @@ exports.handler = async (event) => {
         const res = JSON.parse(event.body);
         const { highLevelContact } = JSON.parse(event.body);
 
-        // create contact in pipedrive
-        const person = await addToPipedrive(highLevelContact);
+        console.log("res", res);
+        console.log("highLevelContact", highLevelContact);
 
-        console.log(res);
+        // create contact in pipedrive
+        // const person = await addToPipedrive(highLevelContact);
 
         return {
             statusCode: 200,
