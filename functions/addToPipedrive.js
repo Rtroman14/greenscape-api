@@ -7,14 +7,10 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const res = JSON.parse(event.body);
-        const { highLevelContact } = JSON.parse(event.body);
-
-        console.log("res", res);
-        console.log("highLevelContact", highLevelContact);
+        const highLevelContact = JSON.parse(event.body);
 
         // create contact in pipedrive
-        // const person = await addToPipedrive(highLevelContact);
+        const person = await addToPipedrive(highLevelContact);
 
         return {
             statusCode: 200,
