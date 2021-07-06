@@ -3,6 +3,8 @@ require("dotenv").config();
 const PipedriveApi = require("./Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
+const slackNotification = require("../../src/slackNotification");
+
 const { orgInfo } = require("../../src/helpers");
 
 module.exports = async (contact) => {
@@ -26,12 +28,17 @@ module.exports = async (contact) => {
         let organization = await Pipedrive.findOrganization(org.street);
 
         if (!organization) {
+            const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
+
             const category = await Pipedrive.getOrganizationFields("Category");
 
-            const property = category.options.find((option) => option.label === "Property");
+            const property = category.options.find(
+                (option) => option.label === "Property Management Company"
+            );
 
             const newOrganization = JSON.stringify({
                 name: org.name,
+                owner_id: foundUser.id,
                 address: org.fullAddress,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,
@@ -45,6 +52,8 @@ module.exports = async (contact) => {
         return organization;
     } catch (error) {
         console.log("ERROR FINDING || CREATING ORGANIZATION ---", error);
+
+        await slackNotification(`\n*File:* pipedriveOrganization\n*Error:* ${error.message}\n`);
         return false;
     }
 };

@@ -3,9 +3,11 @@ require("dotenv").config();
 const PipedriveApi = require("./Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
+const slackNotification = require("../../src/slackNotification");
+
 module.exports = async (contact) => {
     try {
-        // const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
+        const foundUser = await findUser("Ryan Roman"); // !IMPORTANT - CHRIS PEGRAM
 
         let personName = contact.full_name || contact.name;
 
@@ -17,7 +19,7 @@ module.exports = async (contact) => {
             const newPerson = JSON.stringify({
                 name: personName,
                 label: label.id,
-                // owner_id: foundUser.id,
+                owner_id: foundUser.id,
                 // org_id: orgID,
                 visible_to: "7", // verify in greenscape database
                 email: contact.email || "",
@@ -32,6 +34,9 @@ module.exports = async (contact) => {
         return person;
     } catch (error) {
         console.log("ERROR CREATING || FINDING CONTACT ---", error);
+
+        await slackNotification(`\n*File:* pipedrivePerson\n*Error:* ${error.message}\n`);
+
         return false;
     }
 };
