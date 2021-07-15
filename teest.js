@@ -18,6 +18,7 @@ const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
             "https://greenscape.netlify.app/.netlify/functions/contactDND",
             { recordID: "recRwrhXXNT6P3ckn" }
         );
+
         console.log(res);
     } catch (error) {
         console.log(error);
