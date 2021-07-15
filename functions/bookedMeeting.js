@@ -45,7 +45,7 @@ exports.handler = async (event) => {
         const deal = JSON.stringify({
             title: organizationName,
             person_id: person.id,
-            owner_id: user.id,
+            user_id: user.id,
             org_id: organizationID,
             stage_id: 1,
             status: "open",
