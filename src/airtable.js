@@ -64,7 +64,7 @@ module.exports = class AirtableApi {
 
             const res = await base("First Line Ready").find(recordID);
 
-            return res.fields;
+            return { ...res.fields, recordID: res.getId() };
         } catch (error) {
             console.log("ERROR GETCONTACT() ---", error);
             return false;
