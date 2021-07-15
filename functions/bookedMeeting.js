@@ -17,8 +17,11 @@ exports.handler = async (event) => {
         };
     } else if (event.httpMethod === "POST") {
         const newContact = JSON.parse(event.body);
+        const { recordID } = JSON.parse(event.body);
 
-        let person = await pipedrivePerson(newContact);
+        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", recordID);
+
+        let person = await pipedrivePerson(contact);
 
         let organizationID;
         let organizationName;

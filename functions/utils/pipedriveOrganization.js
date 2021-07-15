@@ -10,23 +10,23 @@ const { orgInfo } = require("../../src/helpers");
 module.exports = async (contact) => {
     try {
         let org = {
-            name: contact.street || "",
-            address: contact.address1 || "",
-            fullAddress: contact.address1 || "",
-            street: contact.street || "",
-            city: contact.city || "",
-            state: contact.state || "",
-            zip: contact.postalCode || "",
+            name: contact.street || contact.Street || "",
+            address: contact.address1 || contact.Address || "",
+            fullAddress: contact.address1 || contact.Address || "",
+            street: contact.street || contact.Street || "",
+            city: contact.city || contact.City || "",
+            state: contact.state || contact.State || "",
+            zip: contact.postalCode || contact.Zip || "",
         };
 
-        if (contact.street === "") {
-            org = orgInfo(contact.address1);
+        if (org.street === "") {
+            org = orgInfo(org.address);
         }
 
         let organization = await Pipedrive.findOrganization(org.street);
 
         if (!organization) {
-            const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+            // const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
 
             const category = await Pipedrive.getOrganizationFields("Category");
 

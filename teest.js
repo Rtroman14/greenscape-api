@@ -11,15 +11,9 @@ const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
 
 (async () => {
     try {
-        // const contact = await Airtable.getContact("appRGIOnGz04cUXz3", "recRwrhXXNT6P3ckn");
-        // console.log(contact);
+        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", "recRwrhXXNT6P3ckn");
 
-        const res = await axios.post(
-            "https://greenscape.netlify.app/.netlify/functions/contactDND",
-            { recordID: "recRwrhXXNT6P3ckn" }
-        );
-
-        console.log(res);
+        console.log(contact);
     } catch (error) {
         console.log(error);
     }
