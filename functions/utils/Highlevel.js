@@ -184,6 +184,7 @@ module.exports = class HighLevel {
             return res;
         } catch (error) {
             console.log("ERROR ADDTOCAMPAIGN ---", error);
+            return false;
         }
     }
 };

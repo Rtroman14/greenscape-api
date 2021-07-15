@@ -163,6 +163,19 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async findOrganizationByID(id) {
+        try {
+            const config = this.getConfig("get", `organizations/${id}?`);
+            const { data } = await axios(config);
+
+            // return organization.length > 0 ? organization[0].item : false;
+            return data.data;
+        } catch (error) {
+            console.log("ERROR FINDING ORGANIZATION ---", error);
+            return false;
+        }
+    }
+
     async createOrganization(data) {
         try {
             const config = this.getConfig("post", "organizations?", data);
@@ -223,6 +236,23 @@ module.exports = class PipeDriveApi {
             return res.data.data;
         } catch (error) {
             console.log("ERROR CREATING ORGANIZATION ---", error);
+        }
+    }
+
+    async getPropertyType(orgID) {
+        try {
+            const orgFields = await this.getOrganizationFields("Property Type");
+
+            const org = await this.findOrganizationByID(orgID);
+
+            const propertyType = orgFields.options.find(
+                (option) => option.id === Number(org[orgFields.key])
+            );
+
+            return propertyType.label;
+        } catch (error) {
+            console.log("ERROR GETPROPERTYTYPE ---", error);
+            return false;
         }
     }
 };

@@ -7,6 +7,8 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 const HighlevelApi = require("./utils/Highlevel");
 const Highlevel = new HighlevelApi(process.env.HIGHLEVEL_API);
 
+const campaigns = require("./utils/campaigns");
+
 exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
         return {
@@ -18,7 +20,7 @@ exports.handler = async (event) => {
         console.log(deal);
 
         // IF DEAL === DISCOVERY MEETING || ONSITE MEETING
-        if (deal.current.stage_id === 1) {
+        if (deal.current.stage_id === 1 || deal.current.stage_id === 2) {
             const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
 
             const triggerCampaignPrevious = deal.previous[triggerCampaign.key];
@@ -28,23 +30,12 @@ exports.handler = async (event) => {
                 (option) => option.id === Number(triggerCampaignCurrent)
             );
 
-            // IF DISCOVERY MEETING STAGE && triggerCampaignCurrent === DISCOVERY MEETING ID
-            // IF ONSITE MEETING STAGE && triggerCampaignCurrent === ONSITE MEETING ID
-
             if (
                 triggerCampaignPrevious !== triggerCampaignCurrent &&
                 triggerCampaignCurrent !== null // campaign depends on stage
             ) {
-                const campaigns = [
-                    {
-                        name: "Missed Discovery Meeting",
-                        id: "123",
-                    },
-                    {
-                        name: "Missed Onsite Meeting",
-                        id: "456",
-                    },
-                ];
+                // get property type
+                const propertyType = await Pipedrive.getPropertyType(deal.current.org_id);
 
                 // get person
                 const person = await Pipedrive.findPersonID(deal.current.person_id);
@@ -69,30 +60,56 @@ exports.handler = async (event) => {
                     console.log("NO HIGHLEVEL PERSON");
                 }
 
-                // push highlevel person to appropriate campaign
-                const campaign = campaigns.find(
-                    (campaign) => campaign.name === campaignOption.label
-                );
+                // choose correct campaign to send prospect to
+                let campaign = false;
 
-                // const addedToCampaign = await HighLevel.addToCampaign(
-                //     highLevelPerson.id,
-                //     campaign.id
-                // );
+                if (
+                    deal.current.stage_id === 1 &&
+                    campaignOption.label === "Missed Discovery Meeting"
+                ) {
+                    campaign = campaigns[campaignOption.label].find((campaign) =>
+                        campaign.name.includes(propertyType)
+                    );
+                    if (campaign === undefined) {
+                        campaign = {
+                            name: "Other - Did Not Book",
+                            id: "ozLrdIRTIRnR8AWGI3lI",
+                        };
+                    }
+                }
+                if (
+                    deal.current.stage_id === 2 &&
+                    campaignOption.label === "Missed Onsite Meeting"
+                ) {
+                    campaign = campaigns[campaignOption.label].find((campaign) =>
+                        campaign.name.includes(propertyType)
+                    );
+                    if (campaign === undefined) {
+                        campaign = {
+                            name: "Other - Onsite Meeting Canceled",
+                            id: "CM0AGl4EKjyP5IOoCIL7",
+                        };
+                    }
+                }
 
-                console.log(
-                    `\nAdded ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
-                );
+                if (campaign) {
+                    const addedToCampaign = await Highlevel.addToCampaign(
+                        highLevelPerson.id,
+                        campaign.id
+                    );
 
-                // // create note
-                // const date = moment(deal.current.add_time).format("dddd, MMMM Do YYYY");
+                    console.log(
+                        `\nAdded ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
+                    );
 
-                const note = JSON.stringify({
-                    content: `${deal.current.person_name} with ${
-                        deal.current.org_name || "empty"
-                    } was sent to outreach campaign: ${campaign.name}.`,
-                    deal_id: deal.current.id,
-                });
-                await Pipedrive.createNote(note);
+                    const note = JSON.stringify({
+                        content: `${deal.current.person_name} with ${
+                            deal.current.org_name || "empty"
+                        } was sent to outreach campaign: ${campaign.name}.`,
+                        deal_id: deal.current.id,
+                    });
+                    await Pipedrive.createNote(note);
+                }
             }
         }
 
@@ -107,8 +124,3 @@ exports.handler = async (event) => {
         };
     }
 };
-
-// options: [
-//     { label: 'Missed Discovery Meeting', id: 18 },
-//     { label: 'Missed Onsite Meeting', id: 19 }
-//   ],
