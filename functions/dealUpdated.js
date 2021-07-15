@@ -15,6 +15,7 @@ exports.handler = async (event) => {
         };
     } else if (event.httpMethod === "POST") {
         const deal = JSON.parse(event.body);
+        console.log(deal);
 
         // IF DEAL === DISCOVERY MEETING || ONSITE MEETING
         if (deal.current.stage_id === 1) {
@@ -82,13 +83,13 @@ exports.handler = async (event) => {
                     `\nAdded ${deal.current.person_name} to Highlevel campaign: ${campaign.name}\n`
                 );
 
-                // create note
-                const date = moment(deal.current.add_time).format("dddd, MMMM Do YYYY");
+                // // create note
+                // const date = moment(deal.current.add_time).format("dddd, MMMM Do YYYY");
 
                 const note = JSON.stringify({
                     content: `${deal.current.person_name} with ${
                         deal.current.org_name || "empty"
-                    } was sent to outreach campaign: ${campaign.name} on ${date}`,
+                    } was sent to outreach campaign: ${campaign.name}.`,
                     deal_id: deal.current.id,
                 });
                 await Pipedrive.createNote(note);
