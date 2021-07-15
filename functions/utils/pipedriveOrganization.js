@@ -26,7 +26,7 @@ module.exports = async (contact) => {
         let organization = await Pipedrive.findOrganization(org.street);
 
         if (!organization) {
-            // const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+            const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
 
             const category = await Pipedrive.getOrganizationFields("Category");
 
@@ -34,7 +34,7 @@ module.exports = async (contact) => {
 
             const newOrganization = JSON.stringify({
                 name: org.name,
-                // owner_id: user.id,
+                owner_id: user.id,
                 address: org.fullAddress,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,

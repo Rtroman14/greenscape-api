@@ -20,7 +20,13 @@ exports.handler = async (event) => {
         console.log(deal);
 
         // IF DEAL === DISCOVERY MEETING || ONSITE MEETING
-        if (deal.current.stage_id === 1 || deal.current.stage_id === 2) {
+        const discoveryMeetingStage = 1;
+        const onsiteMeetingStage = 36;
+
+        if (
+            deal.current.stage_id === discoveryMeetingStage ||
+            deal.current.stage_id === onsiteMeetingStage
+        ) {
             const triggerCampaign = await Pipedrive.dealFields("Trigger Outreach Campaign");
 
             const triggerCampaignPrevious = deal.previous[triggerCampaign.key];
@@ -64,7 +70,7 @@ exports.handler = async (event) => {
                 let campaign = false;
 
                 if (
-                    deal.current.stage_id === 1 &&
+                    deal.current.stage_id === discoveryMeetingStage &&
                     campaignOption.label === "Missed Discovery Meeting"
                 ) {
                     campaign = campaigns[campaignOption.label].find((campaign) =>
@@ -78,7 +84,7 @@ exports.handler = async (event) => {
                     }
                 }
                 if (
-                    deal.current.stage_id === 2 &&
+                    deal.current.stage_id === onsiteMeetingStage &&
                     campaignOption.label === "Missed Onsite Meeting"
                 ) {
                     campaign = campaigns[campaignOption.label].find((campaign) =>
