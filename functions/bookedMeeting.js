@@ -16,7 +16,6 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const newContact = JSON.parse(event.body);
         const { recordID } = JSON.parse(event.body);
 
         const contact = await Airtable.getContact("appRGIOnGz04cUXz3", recordID);
@@ -27,13 +26,13 @@ exports.handler = async (event) => {
         let organizationName;
 
         if (person.organization === null || person.org_id === null) {
-            const organization = await pipedriveOrganization(newContact);
+            const organization = await pipedriveOrganization(contact);
             organizationName = organization.name;
             person = await Pipedrive.updatePerson(person.id, {
                 org_id: organization.id,
             });
 
-            console.log(`Assigned ${organization.name} to ${newContact.full_name}`);
+            console.log(`Assigned ${organization.name} to ${person.name}`);
 
             organizationID = organization.id;
         } else {
@@ -57,12 +56,12 @@ exports.handler = async (event) => {
         const updatedFields = JSON.stringify({ label: label.id });
         await Pipedrive.updatePerson(person.id, updatedFields);
 
-        // update airtable status === "Booked Meeting"
-        const contact = await Airtable.findContact("appRGIOnGz04cUXz3", person.name);
-        contact &&
-            (await Airtable.updateContact("appRGIOnGz04cUXz3", contact.recordID, {
-                Status: "Booked Meeting",
-            }));
+        // // update airtable status === "Booked Meeting"
+        // const contact = await Airtable.findContact("appRGIOnGz04cUXz3", person.name);
+        // contact &&
+        //     (await Airtable.updateContact("appRGIOnGz04cUXz3", contact.recordID, {
+        //         Status: "Booked Meeting",
+        //     }));
 
         return {
             statusCode: 200,
