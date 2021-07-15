@@ -46,15 +46,28 @@ module.exports = class AirtableApi {
         }
     }
 
-    async getContact(baseID, view) {
+    // async getContact(baseID, view) {
+    //     try {
+    //         const base = await this.assignAirtable(baseID);
+
+    //         const res = await base("First Line Ready").select({ maxRecords: 1, view }).firstPage();
+
+    //         return res.length > 0 ? { ...res[0].fields, recordID: res[0].getId() } : false;
+    //     } catch (error) {
+    //         console.log("ERROR GETCONTACT() ---", error);
+    //     }
+    // }
+
+    async getContact(baseID, recordID) {
         try {
             const base = await this.assignAirtable(baseID);
 
-            const res = await base("First Line Ready").select({ maxRecords: 1, view }).firstPage();
+            const res = await base("First Line Ready").find(recordID);
 
-            return res.length > 0 ? { ...res[0].fields, recordID: res[0].getId() } : false;
+            return res.fields;
         } catch (error) {
             console.log("ERROR GETCONTACT() ---", error);
+            return false;
         }
     }
 

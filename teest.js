@@ -5,42 +5,18 @@ const axios = require("axios");
 const AirtableApi = require("./src/airtable");
 const HighlevelApi = require("./src/Highlevel");
 const { liveCampaigns, mapContact, campaignsToRun, campaignsDueToday } = require("./src/helpers");
+const pipedrivePerson = require("./functions/utils/pipedrivePerson");
 
 const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
 
-const numContacts = 1;
-
 (async () => {
     try {
-        const getCampaigns = await Airtable.getCampaigns("CRM");
-        let campaigns = liveCampaigns(getCampaigns);
-        campaigns = campaignsDueToday(campaigns);
-        campaigns = campaignsToRun(campaigns);
+        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", "recRwrhXXNT6P3ckn");
+        // console.log(contact);
 
-        campaigns = campaigns.filter((campaign) => campaign.Client === "Greenscape");
+        let person = await pipedrivePerson(contact);
 
-        for (let i = 0; i < numContacts; i++) {
-            for (let campaign of campaigns) {
-                let view = "First Lines";
-
-                if ("Tag" in campaign) {
-                    view = `First Lines - ${campaign.Tag}`;
-                }
-
-                const contact = await Airtable.getContact(campaign["Base ID"], view);
-
-                if (contact) {
-                    const highLevelContact = mapContact(contact);
-
-                    const { data } = await axios.post(
-                        "https://greenscape.netlify.app/.netlify/functions/addToPipedrive",
-                        highLevelContact
-                    );
-
-                    console.log(data);
-                }
-            }
-        }
+        console.log(person);
     } catch (error) {
         console.log(error);
     }

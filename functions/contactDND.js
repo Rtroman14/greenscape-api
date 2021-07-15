@@ -15,9 +15,13 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const newContact = JSON.parse(event.body);
+        const res = JSON.parse(event.body);
+        const { recordID } = JSON.parse(event.body);
+        console.log(res);
 
-        let person = await pipedrivePerson(newContact);
+        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", recordID);
+
+        let person = await pipedrivePerson(contact);
 
         const note = JSON.stringify({
             content: `${person.name} wishes not to contacted`,
@@ -31,11 +35,11 @@ exports.handler = async (event) => {
         await Pipedrive.updatePerson(person.id, updatedFields);
 
         // update airtable status === "Cold"
-        const contact = await Airtable.findContact("appRGIOnGz04cUXz3", person.name);
-        contact &&
-            (await Airtable.updateContact("appRGIOnGz04cUXz3", contact.recordID, {
-                Status: "Cold",
-            }));
+        // const contact = await Airtable.findContact("appRGIOnGz04cUXz3", person.name);
+        // contact &&
+        //     (await Airtable.updateContact("appRGIOnGz04cUXz3", contact.recordID, {
+        //         Status: "Cold",
+        //     }));
 
         return {
             statusCode: 200,
