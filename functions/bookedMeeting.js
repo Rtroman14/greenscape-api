@@ -66,6 +66,7 @@ exports.handler = async (event) => {
             await axios.post("https://greenscape.netlify.app/.netlify/functions/activity", {
                 contact,
                 deal: newDeal,
+                user,
             });
         }
 

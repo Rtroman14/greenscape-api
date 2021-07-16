@@ -12,9 +12,10 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const { contact, deal } = JSON.parse(event.body);
+        const { contact, deal, user } = JSON.parse(event.body);
 
         console.log(deal);
+        console.log(user);
 
         const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
             "YYYY-MM-DD"
@@ -27,12 +28,12 @@ exports.handler = async (event) => {
 
         // let deal = await Pipedrive.deal(person.organization.name, person.id);
 
-        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
+        // const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
 
         // create activity associated with all 3 items and assign BDM
         const activity = JSON.stringify({
             subject: "Discovery Call",
-            person_id: deal.person.id,
+            person_id: deal.person_id.value,
             org_id: deal.organization.id,
             deal_id: deal.id,
             type: "discovery_call",
