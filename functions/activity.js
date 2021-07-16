@@ -25,7 +25,7 @@ exports.handler = async (event) => {
             .utc()
             .format("HH:mm");
 
-        const person = await Pipedrive.findPersonName(contact.name);
+        const person = await Pipedrive.findPersonName(contact["Full Name"]);
 
         let deal = await Pipedrive.deal(person.organization.name, person.id);
 
