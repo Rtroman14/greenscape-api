@@ -40,7 +40,7 @@ exports.handler = async (event) => {
             duration: "01:00",
         });
         const newActivity = await Pipedrive.createActivity(activity);
-        console.log(newActivity);
+        console.log(`Scheduled new discovery call for deal: ${deal_title}`);
 
         return {
             statusCode: 200,
