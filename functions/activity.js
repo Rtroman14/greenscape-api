@@ -2,8 +2,6 @@ require("dotenv").config();
 
 const moment = require("moment");
 
-const AirtableApi = require("../src/airtable");
-const Airtable = new AirtableApi(process.env.AIRTABLE_API_KEY);
 const PipedriveApi = require("./utils/Pipedrive");
 const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
@@ -14,9 +12,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const { recordID } = JSON.parse(event.body);
-
-        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", recordID);
+        const contact = JSON.parse(event.body);
 
         const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
             "YYYY-MM-DD"

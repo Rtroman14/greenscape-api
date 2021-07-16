@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const axios = require("axios");
+
 const pipedrivePerson = require("./utils/pipedrivePerson");
 const pipedriveOrganization = require("./utils/pipedriveOrganization");
 
@@ -58,6 +60,13 @@ exports.handler = async (event) => {
         const label = await Pipedrive.getPersonFields("Label", "Hot lead");
         const updatedFields = JSON.stringify({ label: label.id });
         await Pipedrive.updatePerson(person.id, updatedFields);
+
+        // add activity if Scheduled Call
+        if ("Scheduled Meeting" in contact) {
+            await axios.post("https://greenscape.netlify.app/.netlify/functions/test", {
+                contact,
+            });
+        }
 
         return {
             statusCode: 200,
