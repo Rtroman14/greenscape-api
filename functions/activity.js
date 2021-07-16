@@ -12,41 +12,39 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const contact = JSON.parse(event.body);
+        const { contact } = JSON.parse(event.body);
 
-        console.log(contact);
+        const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
+            "YYYY-MM-DD"
+        );
+        const utcTime = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm")
+            .utc()
+            .format("HH:mm");
 
-        // const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
-        //     "YYYY-MM-DD"
-        // );
-        // const utcTime = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm")
-        //     .utc()
-        //     .format("HH:mm");
+        const person = await Pipedrive.findPersonName(contact["Full Name"]);
 
-        // const person = await Pipedrive.findPersonName(contact["Full Name"]);
+        let deal = await Pipedrive.deal(person.organization.name, person.id);
 
-        // let deal = await Pipedrive.deal(person.organization.name, person.id);
+        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
 
-        // const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
-
-        // // create activity associated with all 3 items and assign BDM
-        // const activity = JSON.stringify({
-        //     subject: "Discovery Call",
-        //     person_id: deal.person.id,
-        //     org_id: deal.organization.id,
-        //     deal_id: deal.id,
-        //     type: "discovery_call",
-        //     assigned_to_user_id: user.id,
-        //     due_date: utcDate,
-        //     due_time: utcTime,
-        //     duration: "01:00",
-        // });
-        // const newActivity = await Pipedrive.createActivity(activity);
-        // console.log(newActivity);
+        // create activity associated with all 3 items and assign BDM
+        const activity = JSON.stringify({
+            subject: "Discovery Call",
+            person_id: deal.person.id,
+            org_id: deal.organization.id,
+            deal_id: deal.id,
+            type: "discovery_call",
+            assigned_to_user_id: user.id,
+            due_date: utcDate,
+            due_time: utcTime,
+            duration: "01:00",
+        });
+        const newActivity = await Pipedrive.createActivity(activity);
+        console.log(newActivity);
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ newActivity: "" }),
+            body: JSON.stringify({ newActivity }),
         };
     } else {
         return {
