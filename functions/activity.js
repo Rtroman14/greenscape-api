@@ -25,7 +25,7 @@ exports.handler = async (event) => {
 
         let deal = await Pipedrive.deal(person.organization.name, person.id);
 
-        const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
 
         // create activity associated with all 3 items and assign BDM
         const activity = JSON.stringify({

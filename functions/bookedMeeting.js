@@ -42,7 +42,7 @@ exports.handler = async (event) => {
             organizationName = person.org_name || person.organization.name;
         }
 
-        const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
 
         const deal = JSON.stringify({
             title: organizationName,
