@@ -7,7 +7,7 @@ const slackNotification = require("../../src/slackNotification");
 
 module.exports = async (contact) => {
     try {
-        const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
 
         let personName = contact.full_name || contact.name || contact["Full Name"];
 
