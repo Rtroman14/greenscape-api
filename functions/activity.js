@@ -14,6 +14,8 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const { contact, deal } = JSON.parse(event.body);
 
+        console.log(deal);
+
         const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
             "YYYY-MM-DD"
         );
