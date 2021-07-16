@@ -63,7 +63,7 @@ exports.handler = async (event) => {
 
         // add activity if Scheduled Call
         if ("Scheduled Meeting" in contact) {
-            await axios.post("https://greenscape.netlify.app/.netlify/functions/test", {
+            await axios.post("https://greenscape.netlify.app/.netlify/functions/activity", {
                 contact,
             });
         }
