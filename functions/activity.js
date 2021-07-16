@@ -25,32 +25,25 @@ exports.handler = async (event) => {
             .utc()
             .format("HH:mm");
 
-        console.log("Contact", contact);
+        const person = await Pipedrive.findPersonName(contact.name);
 
-        console.log({ utcDate });
-        console.log({ utcTime });
-
-        let newActivity = "Test";
-
-        // const person = await Pipedrive.findPersonName(contact.name);
-
-        // let deal = await Pipedrive.deal(person.organization.name, person.id);
+        let deal = await Pipedrive.deal(person.organization.name, person.id);
 
         // const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
 
-        // // create activity associated with all 3 items and assign BDM
-        // const activity = JSON.stringify({
-        //     subject: "Discovery Call",
-        //     person_id: deal.person.id,
-        //     org_id: deal.organization.id,
-        //     deal_id: deal.id,
-        //     type: "discovery_call",
-        //     assigned_to_user_id: user.id,
-        //     due_date: utcDate,
-        //     due_time: utcTime,
-        //     duration: "01:00",
-        // });
-        // const newActivity = await Pipedrive.createActivity(activity);
+        // create activity associated with all 3 items and assign BDM
+        const activity = JSON.stringify({
+            subject: "Discovery Call",
+            person_id: deal.person.id,
+            org_id: deal.organization.id,
+            deal_id: deal.id,
+            type: "discovery_call",
+            // assigned_to_user_id: user.id,
+            due_date: utcDate,
+            due_time: utcTime,
+            duration: "01:00",
+        });
+        const newActivity = await Pipedrive.createActivity(activity);
 
         return {
             statusCode: 200,
