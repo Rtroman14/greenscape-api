@@ -12,7 +12,9 @@ exports.handler = async (event) => {
             body: JSON.stringify({ msg: "POST request only" }),
         };
     } else if (event.httpMethod === "POST") {
-        const contact = JSON.parse(event.body);
+        const { recordID } = JSON.parse(event.body);
+
+        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", recordID);
 
         const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
             "YYYY-MM-DD"
