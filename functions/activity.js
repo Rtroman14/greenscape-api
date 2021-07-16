@@ -14,26 +14,39 @@ exports.handler = async (event) => {
     } else if (event.httpMethod === "POST") {
         const contact = JSON.parse(event.body);
 
-        const utcDate = new moment(contact.meetingTime, "YYYY-MM-DDTHH:mm").format("YYYY-MM-DD");
-        const utcTime = new moment(contact.meetingTime, "YYYY-MM-DDTHH:mm").utc().format("HH:mm");
+        const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
+            "YYYY-MM-DD"
+        );
+        const utcTime = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm")
+            .utc()
+            .format("HH:mm");
 
-        const person = await Pipedrive.findPersonName(contact.name);
+        console.log("Contact", contact);
 
-        let deal = await Pipedrive.deal(person.organization.name, person.id);
+        console.log({ utcDate });
+        console.log({ utcTime });
 
-        // create activity associated with all 3 items and assign BDM
-        const activity = JSON.stringify({
-            subject: "Discovery Call Title",
-            person_id: deal.person.id,
-            org_id: deal.organization.id,
-            deal_id: deal.id,
-            type: "discovery_call",
-            assigned_to_user_id: 12349318, // UPDATE TO CHRIS
-            due_date: utcDate,
-            due_time: utcTime,
-            duration: "01:00",
-        });
-        const newActivity = await Pipedrive.createActivity(activity);
+        let newActivity = "Test";
+
+        // const person = await Pipedrive.findPersonName(contact.name);
+
+        // let deal = await Pipedrive.deal(person.organization.name, person.id);
+
+        // const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+
+        // // create activity associated with all 3 items and assign BDM
+        // const activity = JSON.stringify({
+        //     subject: "Discovery Call",
+        //     person_id: deal.person.id,
+        //     org_id: deal.organization.id,
+        //     deal_id: deal.id,
+        //     type: "discovery_call",
+        //     assigned_to_user_id: user.id,
+        //     due_date: utcDate,
+        //     due_time: utcTime,
+        //     duration: "01:00",
+        // });
+        // const newActivity = await Pipedrive.createActivity(activity);
 
         return {
             statusCode: 200,
