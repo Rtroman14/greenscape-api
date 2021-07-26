@@ -10,35 +10,10 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
 (async (event) => {
     try {
-        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", "recRwrhXXNT6P3ckn");
+        const campaignKey = "8ea95ab608f436c0cb6ea27ddf89882754b77f63";
 
-        const utcDate = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm").format(
-            "YYYY-MM-DD"
-        );
-        const utcTime = new moment(contact["Scheduled Meeting"], "YYYY-MM-DDTHH:mm")
-            .utc()
-            .format("HH:mm");
-
-        const person = await Pipedrive.findPersonName(contact["Full Name"]);
-
-        let deal = await Pipedrive.deal(person.organization.name, person.id);
-
-        const user = await Pipedrive.getUser("Danae McDermott"); // !IMPORTANT - CHRIS PEGRAM
-
-        // create activity associated with all 3 items and assign BDM
-        const activity = JSON.stringify({
-            subject: "Discovery Call",
-            person_id: deal.person.id,
-            org_id: deal.organization.id,
-            deal_id: deal.id,
-            type: "discovery_call",
-            assigned_to_user_id: user.id,
-            due_date: utcDate,
-            due_time: utcTime,
-            duration: "01:00",
-        });
-        const newActivity = await Pipedrive.createActivity(activity);
-        console.log(newActivity);
+        const contacts = await Pipedrive.getPersons();
+        // console.log(contacts);
     } catch (error) {
         console.log(error);
     }

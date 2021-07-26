@@ -106,6 +106,19 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async getPersons() {
+        try {
+            const config = this.getConfig("get", `persons?limit=500&`);
+            const res = await axios(config);
+
+            const person = res.data.data;
+
+            return person;
+        } catch (error) {
+            console.log("ERROR FINDING PERSON ---", error);
+        }
+    }
+
     async createPerson(data) {
         try {
             const config = this.getConfig("post", `persons?`, data);

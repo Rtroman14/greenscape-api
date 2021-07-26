@@ -56,6 +56,14 @@ exports.handler = async (event) => {
         const newDeal = await Pipedrive.createDeal(deal);
         console.log(`Created new deal: ${newDeal.title}`);
 
+        if ("Notes" in contact) {
+            const note = JSON.stringify({
+                content: contact.Notes,
+                deal_id: newDeal.id,
+            });
+            await Pipedrive.createNote(note);
+        }
+
         // set person label === "Hot Lead"
         const label = await Pipedrive.getPersonFields("Label", "Hot lead");
         const updatedFields = JSON.stringify({ label: label.id });
