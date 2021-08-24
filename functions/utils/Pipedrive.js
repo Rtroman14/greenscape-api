@@ -200,6 +200,19 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async personFields(fieldName) {
+        try {
+            const config = this.getConfig("get", "personFields?");
+            const res = await axios(config);
+
+            const data = res.data.data;
+
+            return data.find((field) => field.name === fieldName);
+        } catch (error) {
+            console.log("ERROR PERSONFIELDS ---", error);
+        }
+    }
+
     async getPersonFields(fieldName, label) {
         try {
             const config = this.getConfig("get", "personFields?");
@@ -211,7 +224,7 @@ module.exports = class PipeDriveApi {
 
             return options.find((option) => option.label === label);
         } catch (error) {
-            console.log("ERROR CREATING ORGANIZATION ---", error);
+            console.log("ERROR CREATING GETPERSONFIELDS ---", error);
         }
     }
 

@@ -29,6 +29,7 @@ module.exports = async (contact) => {
             const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
 
             const category = await Pipedrive.getOrganizationFields("Category");
+            const leadSource = await Pipedrive.getOrganizationFields("Lead Source");
 
             const property = category.options.find((option) => option.label === "Property");
 
@@ -38,6 +39,7 @@ module.exports = async (contact) => {
                 address: org.fullAddress,
                 visible_to: "7", // verify in greenscape database
                 [category.key]: property.id,
+                [leadSource.key]: "Summa",
             });
 
             organization = await Pipedrive.createOrganization(newOrganization);

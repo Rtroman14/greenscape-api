@@ -14,12 +14,15 @@ module.exports = async (contact) => {
         let person = await Pipedrive.findPersonName(personName);
 
         const label = await Pipedrive.getPersonFields("Label", "Prospect");
+        const leadSource = await Pipedrive.personFields("Lead Source");
+        const summaLeadSource = leadSource.options.find((option) => option.label === "Summa");
 
         if (!person) {
             const newPerson = JSON.stringify({
                 name: personName,
                 label: label.id,
                 owner_id: user.id,
+                [leadSource.key]: summaLeadSource.id,
                 // org_id: orgID,
                 visible_to: "7", // verify in greenscape database
                 email: contact.email || contact.Email || "",

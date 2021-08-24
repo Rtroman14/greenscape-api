@@ -43,6 +43,8 @@ exports.handler = async (event) => {
         }
 
         const user = await Pipedrive.getUser("Chris Pegram"); // !IMPORTANT - CHRIS PEGRAM
+        const leadSource = await Pipedrive.dealFields("Lead Source");
+        const summaLeadSource = leadSource.options.find((option) => option.label === "Summa");
 
         const deal = JSON.stringify({
             title: organizationName,
@@ -51,6 +53,7 @@ exports.handler = async (event) => {
             org_id: organizationID,
             stage_id: 1,
             status: "open",
+            [leadSource.key]: summaLeadSource.id,
         });
 
         const newDeal = await Pipedrive.createDeal(deal);
