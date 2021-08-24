@@ -50,7 +50,7 @@ module.exports = class AirtableApi {
     //     try {
     //         const base = await this.assignAirtable(baseID);
 
-    //         const res = await base("First Line Ready").select({ maxRecords: 1, view }).firstPage();
+    //         const res = await base("Prospects").select({ maxRecords: 1, view }).firstPage();
 
     //         return res.length > 0 ? { ...res[0].fields, recordID: res[0].getId() } : false;
     //     } catch (error) {
@@ -62,7 +62,7 @@ module.exports = class AirtableApi {
         try {
             const base = await this.assignAirtable(baseID);
 
-            const res = await base("First Line Ready").find(recordID);
+            const res = await base("Prospects").find(recordID);
 
             return { ...res.fields, recordID: res.getId() };
         } catch (error) {
@@ -75,7 +75,7 @@ module.exports = class AirtableApi {
         try {
             const base = await this.assignAirtable(baseID);
 
-            const res = await base("First Line Ready").select({ view }).all();
+            const res = await base("Prospects").select({ view }).all();
 
             const contacts = res.map((contact) => {
                 return {
@@ -94,7 +94,7 @@ module.exports = class AirtableApi {
         try {
             const base = await this.assignAirtable(baseID);
 
-            await base("First Line Ready").update(recordID, updatedFields);
+            await base("Prospects").update(recordID, updatedFields);
         } catch (error) {
             console.log("ERROR UPDATECONTACT() ---", error);
         }
@@ -104,7 +104,7 @@ module.exports = class AirtableApi {
         try {
             const base = await this.assignAirtable(baseID);
 
-            const res = await base("First Line Ready")
+            const res = await base("Prospects")
                 .select({
                     maxRecords: 10,
                     filterByFormula: `AND(({Full Name} = "${fullName}"))`,
