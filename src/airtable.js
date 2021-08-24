@@ -75,7 +75,7 @@ module.exports = class AirtableApi {
         try {
             const base = await this.assignAirtable(baseID);
 
-            const res = await base("First Line Ready").select({ view }).firstPage();
+            const res = await base("First Line Ready").select({ view }).all();
 
             const contacts = res.map((contact) => {
                 return {

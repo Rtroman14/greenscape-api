@@ -42,6 +42,21 @@ module.exports = class PipeDriveApi {
         }
     }
 
+    async dealByPersonID(term, personID) {
+        try {
+            const config = this.getConfig(
+                "get",
+                `deals/search?term=${term}&person_id=${personID}&`
+            );
+            const res = await axios(config);
+
+            return res.data.data.items[0].item;
+        } catch (error) {
+            console.log("ERROR GETTING DEALS ---", error);
+            return false;
+        }
+    }
+
     async deals() {
         try {
             const config = this.getConfig("get", `deals?`);
@@ -137,7 +152,32 @@ module.exports = class PipeDriveApi {
 
             return res.data.data;
         } catch (error) {
-            console.log("ERROR CREATING PERSON ---", error);
+            console.log("ERROR UPDATEPERSON ---", error);
+            return false;
+        }
+    }
+
+    async updateOrganization(orgID, data) {
+        try {
+            const config = this.getConfig("put", `organizations/${orgID}?`, data);
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR UPDATEORGANIZATION ---", error);
+            return false;
+        }
+    }
+
+    async updateDeal(id, data) {
+        try {
+            const config = this.getConfig("put", `deals/${id}?`, data);
+            const res = await axios(config);
+
+            return res.data.data;
+        } catch (error) {
+            console.log("ERROR UPDATEDEAL ---", error);
+            return false;
         }
     }
 

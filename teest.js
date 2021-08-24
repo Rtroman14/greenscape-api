@@ -10,19 +10,25 @@ const Pipedrive = new PipedriveApi(process.env.PIPEDRIVE_API);
 
 (async (event) => {
     try {
-        // const summaLeadSource = await Pipedrive.getPersonFields("Lead Source", "Summa");
-        // console.log(summaLeadSource);
-        const contact = await Airtable.getContact("appRGIOnGz04cUXz3", "recoZviPZlLEhRSSp");
-        // console.log(contact);
+        // get all contacts in "Texted" view
+        // loop through everyone contact
+        // find contact in PD && update lead source
+        // find every organization in PD && update lead source
+        const contacts = await Airtable.getContacts("appRGIOnGz04cUXz3", "Texted");
 
-        // const leadSource = await Pipedrive.personFields("Lead Source");
-        // console.log(leadSource);
-        // const summaLeadSource = leadSource.options.find((option) => option.label === "Summa");
-        // console.log(summaLeadSource);
+        for (let contact of contacts) {
+            const pdContact = await Pipedrive.findPersonName(contact["Full Name"]);
 
-        const leadSource = await Pipedrive.dealFields("Lead Source");
-        const summaLeadSource = leadSource.options.find((option) => option.label === "Summa");
-        console.log(summaLeadSource);
+            const updatedPerson = await Pipedrive.updatePerson(pdContact.id, {
+                b5bcd14be147c43d1d3604129ddb83b7be1d9978: "215",
+            });
+
+            if (updatedPerson) {
+                console.log(`Updated lead source for: ${updatedPerson.name}`);
+            } else {
+                console.log(`ERROR with contact: ${pdContact.name}`);
+            }
+        }
     } catch (error) {
         console.log(error);
     }
