@@ -8,7 +8,6 @@ const slackNotification = require("../../src/slackNotification");
 const { orgInfo } = require("../../src/helpers");
 
 module.exports = async (contact) => {
-    console.log("pipedriveOrganization =", contact);
     try {
         let org = {
             name: contact.address1 || "",
@@ -22,20 +21,8 @@ module.exports = async (contact) => {
             zip: contact.postalCode || "",
         };
 
-        console.log("org =", org);
-
-        // let org = {
-        //     name: contact.street || contact.Street || contact.address1 || "",
-        //     address: contact.address1 || contact.Address || "",
-        //     fullAddress: contact.address1 || contact.Address || "",
-        //     street: contact.street || contact.Street || "",
-        //     city: contact.city || contact.City || "",
-        //     state: contact.state || contact.State || "",
-        //     zip: contact.postalCode || contact.Zip || "",
-        // };
-
         if (org.street === "") {
-            org = orgInfo(org.address);
+            org = orgInfo(org.fullAddress);
         }
 
         let organization = await Pipedrive.findOrganization(org.street);
