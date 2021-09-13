@@ -8,9 +8,10 @@ const slackNotification = require("../../src/slackNotification");
 const { orgInfo } = require("../../src/helpers");
 
 module.exports = async (contact) => {
+    console.log("pipedriveOrganization =", contact);
     try {
         let org = {
-            name: contact.street || contact.Street || "",
+            name: contact.street || contact.Street || contact.address1 || "",
             address: contact.address1 || contact.Address || "",
             fullAddress: contact.address1 || contact.Address || "",
             street: contact.street || contact.Street || "",
