@@ -11,14 +11,25 @@ module.exports = async (contact) => {
     console.log("pipedriveOrganization =", contact);
     try {
         let org = {
-            name: contact.street || contact.Street || contact.address1 || "",
+            name: contact.address1 || "",
             address: contact.address1 || contact.Address || "",
-            fullAddress: contact.address1 || contact.Address || "",
-            street: contact.street || contact.Street || "",
-            city: contact.city || contact.City || "",
-            state: contact.state || contact.State || "",
-            zip: contact.postalCode || contact.Zip || "",
+            fullAddress:
+                `${contact.address1}, ${contact.city}, ${contact.state} ${contact.postalCode}` ||
+                "",
+            street: contact.address1 || "",
+            city: contact.city || "",
+            state: contact.state || "",
+            zip: contact.postalCode || "",
         };
+        // let org = {
+        //     name: contact.street || contact.Street || contact.address1 || "",
+        //     address: contact.address1 || contact.Address || "",
+        //     fullAddress: contact.address1 || contact.Address || "",
+        //     street: contact.street || contact.Street || "",
+        //     city: contact.city || contact.City || "",
+        //     state: contact.state || contact.State || "",
+        //     zip: contact.postalCode || contact.Zip || "",
+        // };
 
         if (org.street === "") {
             org = orgInfo(org.address);
