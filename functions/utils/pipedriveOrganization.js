@@ -21,6 +21,9 @@ module.exports = async (contact) => {
             state: contact.state || "",
             zip: contact.postalCode || "",
         };
+
+        console.log("org =", org);
+
         // let org = {
         //     name: contact.street || contact.Street || contact.address1 || "",
         //     address: contact.address1 || contact.Address || "",
